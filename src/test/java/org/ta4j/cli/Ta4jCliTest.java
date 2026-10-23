@@ -57,7 +57,7 @@ class Ta4jCliTest {
     Path tempDir;
 
     @Test
-    void helpUsesProgressiveDisclosure() {
+    public void helpUsesProgressiveDisclosure() {
         CliRunResult rootHelp = runCliAllowingError("--help");
         CliRunResult strategyHelp = runCliAllowingError("strategy", "--help");
         CliRunResult forecastHelp = runCliAllowingError("forecast", "run", "--help");
@@ -95,7 +95,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void versionIsAlwaysVisible() {
+    public void versionIsAlwaysVisible() {
         CliRunResult result = runCliAllowingError("--version");
 
         assertThat(result.exitCode()).isZero();
@@ -103,7 +103,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void catalogAndCompletionAreGeneratedFromTheLiveCommandModel() {
+    public void catalogAndCompletionAreGeneratedFromTheLiveCommandModel() {
         CliRunResult catalogRun = runCliAllowingError("catalog");
         CliRunResult completionRun = runCliAllowingError("completion", "--shell", "bash");
 
@@ -117,7 +117,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void structuredErrorsDistinguishUsageFailures() {
+    public void structuredErrorsDistinguishUsageFailures() {
         CliRunResult result = runCliAllowingError("--error-format", "json", "backtest");
 
         assertThat(result.exitCode()).isEqualTo(2);
@@ -128,7 +128,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void jsonErrorFormatAppliesWhenItFollowsAnInvalidOptionValue() {
+    public void jsonErrorFormatAppliesWhenItFollowsAnInvalidOptionValue() {
         CliRunResult result = runCliAllowingError("forecast", "run", "--data-file", "unused.csv", "--horizon", "abc",
                 "--error-format", "json");
 
@@ -140,7 +140,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void textUsageErrorsPointToHelpInsteadOfPrintingTheFullUsage() {
+    public void textUsageErrorsPointToHelpInsteadOfPrintingTheFullUsage() {
         CliRunResult result = runCliAllowingError("strategy", "backtest", "--data-file", "unused.csv", "--bogus");
 
         assertThat(result.exitCode()).isEqualTo(2);
@@ -149,7 +149,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void invalidShorthandErrorsKeepTheInputAndCoreReason() throws Exception {
+    public void invalidShorthandErrorsKeepTheInputAndCoreReason() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("indicator", "test", "--data-file", dataFile.toString(),
@@ -160,7 +160,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void quietLoggingReconfiguresWhenErrorFormatChanges() {
+    public void quietLoggingReconfiguresWhenErrorFormatChanges() {
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
         PrintStream originalErr = System.err;
         try (PrintStream redirectedErr = new PrintStream(captured, true, StandardCharsets.UTF_8)) {
@@ -189,7 +189,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void oldFlatCommandsFailAsUnknownCommands() {
+    public void oldFlatCommandsFailAsUnknownCommands() {
         CliRunResult result = runCliAllowingError("backtest");
 
         assertThat(result.exitCode()).isEqualTo(2);
@@ -197,7 +197,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void oldCamelCasePerformanceFlagsFailAsUnknownOptions() {
+    public void oldCamelCasePerformanceFlagsFailAsUnknownOptions() {
         CliRunResult result = runCliAllowingError("performance", "run", "--barCounts", "16");
 
         assertThat(result.exitCode()).isEqualTo(2);
@@ -205,7 +205,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestProducesJsonAndChartArtifacts() throws Exception {
+    public void backtestProducesJsonAndChartArtifacts() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -235,7 +235,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void walkForwardProducesConfigHashAndFoldBreakdown() throws Exception {
+    public void walkForwardProducesConfigHashAndFoldBreakdown() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -255,7 +255,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void sweepProducesDeterministicLeaderBoard() throws Exception {
+    public void sweepProducesDeterministicLeaderBoard() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path outputFile = tempDir.resolve("sweep.json");
 
@@ -271,7 +271,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void indicatorTestBuildsThresholdStrategy() throws Exception {
+    public void indicatorTestBuildsThresholdStrategy() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path outputFile = tempDir.resolve("indicator-test.json");
 
@@ -286,7 +286,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void ruleTestBuildsBacktestAndWalkForwardArtifactsFromNamedRules() throws Exception {
+    public void ruleTestBuildsBacktestAndWalkForwardArtifactsFromNamedRules() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path outputFile = tempDir.resolve("rule-test.json");
 
@@ -306,7 +306,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void ruleTestAllowsTheSameRuleJsonFileForEntryAndExit() throws Exception {
+    public void ruleTestAllowsTheSameRuleJsonFileForEntryAndExit() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -324,7 +324,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void ruleTestBuildsFreshJustOnceRulesForEachFold() throws Exception {
+    public void ruleTestBuildsFreshJustOnceRulesForEachFold() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path entryRuleFile = tempDir.resolve("just-once-entry.json");
         Path exitRuleFile = tempDir.resolve("just-once-exit.json");
@@ -347,7 +347,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void strategyWalkForwardRebuildsSerializedStatefulStrategyForBacktestAndFolds() throws Exception {
+    public void strategyWalkForwardRebuildsSerializedStatefulStrategyForBacktestAndFolds() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Strategy statefulStrategy = new BaseStrategy("just-once-strategy", new JustOnceRule(), new JustOnceRule());
         Path strategyFile = writeSerializedStrategy("just-once-strategy.json", statefulStrategy);
@@ -369,7 +369,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void unreadableStructuredInputFilesExitWithIoErrorCategory() throws Exception {
+    public void unreadableStructuredInputFilesExitWithIoErrorCategory() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path missing = tempDir.resolve("missing.json");
 
@@ -395,7 +395,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void jsonDataFileRejectsPartiallyDecodedCandles() throws Exception {
+    public void jsonDataFileRejectsPartiallyDecodedCandles() throws Exception {
         Path dataFile = tempDir.resolve("partial-coinbase.json");
         Files.writeString(dataFile, """
                 {"candles": [
@@ -412,7 +412,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void jsonDataFileRejectsNonUniformPeriodsWhenAggregating() throws Exception {
+    public void jsonDataFileRejectsNonUniformPeriodsWhenAggregating() throws Exception {
         Path dataFile = tempDir.resolve("irregular-coinbase.json");
         Files.writeString(dataFile, """
                 {"candles": [
@@ -430,7 +430,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void ruleTestRejectsNonFiniteRsiThreshold() throws Exception {
+    public void ruleTestRejectsNonFiniteRsiThreshold() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("rule", "test", "--data-file", dataFile.toString(), "--entry-rule",
@@ -441,7 +441,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void performanceExperimentWritesArtifacts() throws Exception {
+    public void performanceExperimentWritesArtifacts() throws Exception {
         Path outputDir = tempDir.resolve("performance-experiment");
 
         int exitCode = runCli("performance", "run", "--experiment", "kalman-filter", "--bar-counts", "16",
@@ -455,7 +455,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void performanceRejectsOversizedRepetitionCount() throws Exception {
+    public void performanceRejectsOversizedRepetitionCount() throws Exception {
         Path outputDir = tempDir.resolve("performance-oversized-repetitions");
 
         CliRunResult result = runCliAllowingError("performance", "run", "--experiment", "kalman-filter", "--bar-counts",
@@ -467,7 +467,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void performanceRejectsOversizedWarmupCount() throws Exception {
+    public void performanceRejectsOversizedWarmupCount() throws Exception {
         Path outputDir = tempDir.resolve("performance-oversized-warmups");
 
         CliRunResult result = runCliAllowingError("performance", "run", "--experiment", "kalman-filter", "--bar-counts",
@@ -479,7 +479,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void performanceCompareWritesArtifacts() throws Exception {
+    public void performanceCompareWritesArtifacts() throws Exception {
         Path baseDir = tempDir.resolve("performance-base");
         Path candidateDir = tempDir.resolve("performance-candidate");
         Path comparisonDir = tempDir.resolve("performance-comparison");
@@ -499,7 +499,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void performanceCompareFailsTheProcessWhenTheRegressionGateFails() throws Exception {
+    public void performanceCompareFailsTheProcessWhenTheRegressionGateFails() throws Exception {
         Path baseDir = tempDir.resolve("performance-base-regressed");
         Path candidateDir = tempDir.resolve("performance-candidate-regressed");
         Path comparisonDir = tempDir.resolve("performance-comparison-regressed");
@@ -523,7 +523,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void performanceCompareFailsTheProcessWhenChecksumsDiverge() throws Exception {
+    public void performanceCompareFailsTheProcessWhenChecksumsDiverge() throws Exception {
         Path baseDir = tempDir.resolve("performance-base-checksum");
         Path candidateDir = tempDir.resolve("performance-candidate-checksum");
         Path comparisonDir = tempDir.resolve("performance-comparison-checksum");
@@ -544,7 +544,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void performanceCompareRejectsEmptyArtifactGrid() throws Exception {
+    public void performanceCompareRejectsEmptyArtifactGrid() throws Exception {
         Path baseDir = tempDir.resolve("performance-base-empty");
         Path candidateDir = tempDir.resolve("performance-candidate-empty");
         Path comparisonDir = tempDir.resolve("performance-comparison-empty");
@@ -568,7 +568,7 @@ class Ta4jCliTest {
 
     @ParameterizedTest
     @ValueSource(strings = { "NaN", "Infinity" })
-    void performanceCompareRejectsNonFiniteRegressionThresholds(String threshold) throws Exception {
+    public void performanceCompareRejectsNonFiniteRegressionThresholds(String threshold) throws Exception {
         Path baseDir = tempDir.resolve("performance-base-" + threshold);
         Path candidateDir = tempDir.resolve("performance-candidate-" + threshold);
         Files.createDirectories(baseDir);
@@ -585,7 +585,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void performanceCompareNamesTheMismatchedExperimentInputAsAUsageError() throws Exception {
+    public void performanceCompareNamesTheMismatchedExperimentInputAsAUsageError() throws Exception {
         Path baseDir = tempDir.resolve("performance-base-mismatch");
         Path candidateDir = tempDir.resolve("performance-candidate-mismatch");
         Path comparisonDir = tempDir.resolve("performance-comparison-mismatch");
@@ -605,7 +605,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestAcceptsNamedStrategyLabels() throws Exception {
+    public void backtestAcceptsNamedStrategyLabels() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path outputFile = tempDir.resolve("named-strategy-backtest.json");
 
@@ -619,7 +619,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestAcceptsCompactStrategyAndCriterionExpressionsWithDynamicSizing() throws Exception {
+    public void backtestAcceptsCompactStrategyAndCriterionExpressionsWithDynamicSizing() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path outputFile = tempDir.resolve("expression-backtest.json");
 
@@ -636,7 +636,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestAcceptsVersionTwoStrategyJson() throws Exception {
+    public void backtestAcceptsVersionTwoStrategyJson() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path strategyFile = tempDir.resolve("strategy-v2.json");
         Path outputFile = tempDir.resolve("strategy-v2-backtest.json");
@@ -658,7 +658,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void forecastRunProducesDeterministicEmpiricalPriceSummary() throws Exception {
+    public void forecastRunProducesDeterministicEmpiricalPriceSummary() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path outputFile = tempDir.resolve("forecast.json");
 
@@ -677,7 +677,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void forecastRunComposesAnalogConformalAndLognormalModels() throws Exception {
+    public void forecastRunComposesAnalogConformalAndLognormalModels() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path analogOutput = tempDir.resolve("analog-price.json");
         Path conformalOutput = tempDir.resolve("analog-conformal-return.json");
@@ -704,7 +704,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void criterionJsonPreservesTradeSamplingConfiguration() throws Exception {
+    public void criterionJsonPreservesTradeSamplingConfiguration() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path outputFile = tempDir.resolve("criterion-json.json");
         String criterionJson = new SharpeRatioCriterion(0.03d, SamplingFrequency.TRADE, Annualization.ANNUALIZED,
@@ -720,7 +720,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void reproducibleOutputIsByteStableAndOmitsRunMetadata() throws Exception {
+    public void reproducibleOutputIsByteStableAndOmitsRunMetadata() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult first = runCliAllowingError("strategy", "backtest", "--data-file", dataFile.toString(),
@@ -737,7 +737,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void reproducibleOutputUsesContentIdentityInsteadOfLocalInputPath() throws Exception {
+    public void reproducibleOutputUsesContentIdentityInsteadOfLocalInputPath() throws Exception {
         Path firstDataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path secondDataFile = tempDir.resolve("same-bars-under-another-name.csv");
         Files.copy(firstDataFile, secondDataFile);
@@ -764,7 +764,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void stdinDataSupportsComposableAgentPipelines() throws Exception {
+    public void stdinDataSupportsComposableAgentPipelines() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         InputStream input = new ByteArrayInputStream(Files.readAllBytes(dataFile));
 
@@ -780,7 +780,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void stdinReadFailuresUseTheIoErrorContract() {
+    public void stdinReadFailuresUseTheIoErrorContract() {
         InputStream failingInput = new InputStream() {
             @Override
             public int read() throws IOException {
@@ -806,7 +806,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestRejectsMissingDataFileWithIoError() {
+    public void backtestRejectsMissingDataFileWithIoError() {
         String missing = tempDir.resolve("missing.csv").toString();
 
         CliRunResult ioFailure = runCliAllowingError("--error-format", "json", "strategy", "backtest", "--data-file",
@@ -819,7 +819,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestReportsCorruptedCsvBytesAsContentErrors() throws Exception {
+    public void backtestReportsCorruptedCsvBytesAsContentErrors() throws Exception {
         Path corrupt = tempDir.resolve("corrupt.csv");
         Files.writeString(corrupt, """
                 date,open,high,low,close,volume
@@ -839,7 +839,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void sweepRejectsUnboundedWorkFromGridTimesSeriesLength() throws Exception {
+    public void sweepRejectsUnboundedWorkFromGridTimesSeriesLength() throws Exception {
         Path dataFile = writeLongSeriesCsv(39_700);
         StringBuilder fastValues = new StringBuilder();
         StringBuilder slowValues = new StringBuilder();
@@ -861,7 +861,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void forecastStateRejectsProjectionOnlyOptions() throws Exception {
+    public void forecastStateRejectsProjectionOnlyOptions() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("forecast", "run", "--data-file", dataFile.toString(), "--target",
@@ -872,7 +872,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void forecastRejectsUnboundedHorizonBeforeStateEvaluation() throws Exception {
+    public void forecastRejectsUnboundedHorizonBeforeStateEvaluation() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("forecast", "run", "--data-file", dataFile.toString(),
@@ -883,7 +883,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void forecastRejectsRoughVolatilityHorizonBeyondMemoryBound() throws Exception {
+    public void forecastRejectsRoughVolatilityHorizonBeyondMemoryBound() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("forecast", "run", "--data-file", dataFile.toString(),
@@ -894,7 +894,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void forecastRejectsMonteCarloWorkBeyondCeilingBeforeStateEvaluation() throws Exception {
+    public void forecastRejectsMonteCarloWorkBeyondCeilingBeforeStateEvaluation() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("forecast", "run", "--data-file", dataFile.toString(),
@@ -905,7 +905,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void forecastRejectsUnboundedLookbackBars() throws Exception {
+    public void forecastRejectsUnboundedLookbackBars() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("forecast", "run", "--data-file", dataFile.toString(), "--target",
@@ -916,7 +916,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void forecastRejectsUnboundedCalibrationWindow() throws Exception {
+    public void forecastRejectsUnboundedCalibrationWindow() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("forecast", "run", "--data-file", dataFile.toString(), "--target",
@@ -927,7 +927,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void forecastRejectsUnboundedAnalogWork() throws Exception {
+    public void forecastRejectsUnboundedAnalogWork() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("forecast", "run", "--data-file", dataFile.toString(), "--target",
@@ -938,7 +938,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void forecastRejectsConformalMonteCarloWorkBeyondCeiling() throws Exception {
+    public void forecastRejectsConformalMonteCarloWorkBeyondCeiling() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("forecast", "run", "--data-file", dataFile.toString(), "--target",
@@ -948,7 +948,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void forecastRejectsConformalHistoryScansBeyondCeiling() throws Exception {
+    public void forecastRejectsConformalHistoryScansBeyondCeiling() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("forecast", "run", "--data-file", dataFile.toString(), "--target",
@@ -959,7 +959,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void forecastRejectsConformalAnalogWorkBeyondCeiling() throws Exception {
+    public void forecastRejectsConformalAnalogWorkBeyondCeiling() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("forecast", "run", "--data-file", dataFile.toString(), "--target",
@@ -972,7 +972,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void forecastRejectsUnboundedChangePointStateWork() throws Exception {
+    public void forecastRejectsUnboundedChangePointStateWork() throws Exception {
         Path dataFile = writeLongSeriesCsv(39_700);
 
         CliRunResult result = runCliAllowingError("forecast", "run", "--data-file", dataFile.toString(),
@@ -984,7 +984,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void forecastEvaluatesChangePointStateWithinCeiling() throws Exception {
+    public void forecastEvaluatesChangePointStateWithinCeiling() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path outputFile = tempDir.resolve("change-point-state.json");
 
@@ -998,7 +998,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestFailsBeforeExecutionWhenAnyBatchInputIsInvalidByDefault() throws Exception {
+    public void backtestFailsBeforeExecutionWhenAnyBatchInputIsInvalidByDefault() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path outputFile = tempDir.resolve("should-not-exist.json");
 
@@ -1012,7 +1012,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestCombinesStrategyInputsAndSkipsInvalidEntries() throws Exception {
+    public void backtestCombinesStrategyInputsAndSkipsInvalidEntries() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -1045,7 +1045,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void mixedDirectionBacktestsReportStatementsInInputOrderWithFinalProgress() throws Exception {
+    public void mixedDirectionBacktestsReportStatementsInInputOrderWithFinalProgress() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -1071,7 +1071,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void reproduciblePartialOutputOmitsInvalidStrategyFilePaths() throws Exception {
+    public void reproduciblePartialOutputOmitsInvalidStrategyFilePaths() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -1105,7 +1105,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void walkForwardSupportsStrategiesJsonFileAndPreservesPrimaryFields() throws Exception {
+    public void walkForwardSupportsStrategiesJsonFileAndPreservesPrimaryFields() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -1135,7 +1135,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestRejectsInvalidUnstableBarsValue() throws Exception {
+    public void backtestRejectsInvalidUnstableBarsValue() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("strategy", "backtest", "--data-file", dataFile.toString(),
@@ -1146,7 +1146,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestRejectsNegativeUnstableBarsValue() throws Exception {
+    public void backtestRejectsNegativeUnstableBarsValue() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("strategy", "backtest", "--data-file", dataFile.toString(),
@@ -1157,7 +1157,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void sweepRejectsInvalidTopKValue() throws Exception {
+    public void sweepRejectsInvalidTopKValue() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("strategy", "sweep", "--data-file", dataFile.toString(),
@@ -1168,7 +1168,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void sweepRejectsNonPositiveTopKValue() throws Exception {
+    public void sweepRejectsNonPositiveTopKValue() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("strategy", "sweep", "--data-file", dataFile.toString(),
@@ -1179,7 +1179,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void sweepRejectsOverlappingFixedAndGridKeys() throws Exception {
+    public void sweepRejectsOverlappingFixedAndGridKeys() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("strategy", "sweep", "--data-file", dataFile.toString(), "--param",
@@ -1190,7 +1190,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void sweepRejectsDuplicateFixedParamKeys() throws Exception {
+    public void sweepRejectsDuplicateFixedParamKeys() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("strategy", "sweep", "--data-file", dataFile.toString(), "--param",
@@ -1202,7 +1202,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void sweepRejectsDuplicateGridParamKeys() throws Exception {
+    public void sweepRejectsDuplicateGridParamKeys() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("strategy", "sweep", "--data-file", dataFile.toString(),
@@ -1214,7 +1214,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestRejectsOutputPathAliasingDataFile() throws Exception {
+    public void backtestRejectsOutputPathAliasingDataFile() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         byte[] original = Files.readAllBytes(dataFile);
 
@@ -1227,7 +1227,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestRejectsSymlinkedOutputAliasingDataFile() throws Exception {
+    public void backtestRejectsSymlinkedOutputAliasingDataFile() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         byte[] original = Files.readAllBytes(dataFile);
         Path symlink = tempDir.resolve("alias-output.json");
@@ -1242,7 +1242,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestRejectsArtifactsAliasedThroughSymlinkedParentDirectories() throws Exception {
+    public void backtestRejectsArtifactsAliasedThroughSymlinkedParentDirectories() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path realDir = tempDir.resolve("real");
         Files.createDirectory(realDir);
@@ -1259,7 +1259,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestRejectsDanglingSymlinkLeafAliasingOutput() throws Exception {
+    public void backtestRejectsDanglingSymlinkLeafAliasingOutput() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path chartPath = tempDir.resolve("chart.jpg");
         Path outputPath = tempDir.resolve("result.json");
@@ -1275,7 +1275,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestRejectsCyclicDanglingArtifactLinks() throws Exception {
+    public void backtestRejectsCyclicDanglingArtifactLinks() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path first = tempDir.resolve("cycle-a.json");
         Path second = tempDir.resolve("cycle-b.json");
@@ -1292,7 +1292,7 @@ class Ta4jCliTest {
 
     @ParameterizedTest
     @ValueSource(strings = { "strategy backtest", "strategy walk-forward", "indicator test", "rule test" })
-    void reportingWorkflowsRejectMonteCarloCriteriaBeyondWorkCeilingBeforeScoring(String command) throws Exception {
+    public void reportingWorkflowsRejectMonteCarloCriteriaBeyondWorkCeilingBeforeScoring(String command) throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         // The default 10,000 simulations over this year of weekly trades exceed the
         // sampled-bar ceiling for every reporting workflow.
@@ -1314,7 +1314,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void walkForwardScoresEachFoldOnceWithinTheCriterionBudget() throws Exception {
+    public void walkForwardScoresEachFoldOnceWithinTheCriterionBudget() throws Exception {
         Path dataFile = firstBars(copyResource("AAPL-PT1D-20130102_20131231.csv"), 60);
         Path outputFile = tempDir.resolve("walk-forward-monte-carlo.json");
 
@@ -1348,7 +1348,7 @@ class Ta4jCliTest {
 
     @ParameterizedTest
     @ValueSource(strings = { "strategy walk-forward", "rule test" })
-    void walkForwardProgressReportsCompletedOfTotalSplits(String command) throws Exception {
+    public void walkForwardProgressReportsCompletedOfTotalSplits(String command) throws Exception {
         Path dataFile = firstBars(copyResource("AAPL-PT1D-20130102_20131231.csv"), 60);
         Path outputFile = tempDir.resolve("walk-forward-progress-" + command.replace(' ', '-') + ".json");
         List<String> args = new java.util.ArrayList<>(List.of(command.split(" ")));
@@ -1375,7 +1375,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestRejectsNonFiniteTokensInCsvData() throws Exception {
+    public void backtestRejectsNonFiniteTokensInCsvData() throws Exception {
         Path nanCloseFile = tempDir.resolve("nan-close.csv");
         Files.writeString(nanCloseFile, """
                 date,open,high,low,close,volume
@@ -1404,7 +1404,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestRejectsOutputPathAliasingStrategyJsonFile() throws Exception {
+    public void backtestRejectsOutputPathAliasingStrategyJsonFile() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path strategyJsonFile = tempDir.resolve("strategy.json");
         Files.copy(dataFile, strategyJsonFile);
@@ -1419,7 +1419,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestRejectsChartPathAliasingDataFile() throws Exception {
+    public void backtestRejectsChartPathAliasingDataFile() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         byte[] original = Files.readAllBytes(dataFile);
 
@@ -1432,7 +1432,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestRejectsChartPathAliasingOutputPath() throws Exception {
+    public void backtestRejectsChartPathAliasingOutputPath() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path artifactPath = tempDir.resolve("shared-artifact.json");
 
@@ -1446,7 +1446,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void walkForwardRejectsGeometryWithoutFolds() throws Exception {
+    public void walkForwardRejectsGeometryWithoutFolds() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("strategy", "walk-forward", "--data-file", dataFile.toString(),
@@ -1457,7 +1457,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void ruleTestRejectsGeometryWithoutFolds() throws Exception {
+    public void ruleTestRejectsGeometryWithoutFolds() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("rule", "test", "--data-file", dataFile.toString(), "--entry-rule",
@@ -1468,7 +1468,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void ruleTestFailsWhenEveryWalkForwardFoldFails() throws Exception {
+    public void ruleTestFailsWhenEveryWalkForwardFoldFails() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path ruleFile = tempDir.resolve("fold-failing-rule.json");
         Files.writeString(ruleFile, "{\"type\":\"" + FoldFailingRule.class.getName() + "\"}");
@@ -1489,7 +1489,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void sweepReportsPartialFailuresWithoutDroppingSurvivors() throws Exception {
+    public void sweepReportsPartialFailuresWithoutDroppingSurvivors() throws Exception {
         runCli("catalog");
         ExplodingOnceCriterion.throwBudget.set(1);
         TestLogCapture logs = new TestLogCapture();
@@ -1522,7 +1522,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestRejectsParamOptions() throws Exception {
+    public void backtestRejectsParamOptions() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("strategy", "backtest", "--data-file", dataFile.toString(),
@@ -1534,7 +1534,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void indicatorTestRejectsParamOptions() throws Exception {
+    public void indicatorTestRejectsParamOptions() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("indicator", "test", "--data-file", dataFile.toString(),
@@ -1546,7 +1546,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestFailsFastWhenEveryStrategyInputIsInvalid() throws Exception {
+    public void backtestFailsFastWhenEveryStrategyInputIsInvalid() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         CliRunResult result = runCliAllowingError("strategy", "backtest", "--data-file", dataFile.toString(),
@@ -1560,7 +1560,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    void backtestReportsUnreadableStrategiesJsonFileAsIoError() throws Exception {
+    public void backtestReportsUnreadableStrategiesJsonFileAsIoError() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path missing = tempDir.resolve("missing.json");
 

@@ -113,14 +113,14 @@ class CliSupportTest {
     Path tempDir;
 
     @Test
-    void toJsonPrettyPrintsValues() {
+    public void toJsonPrettyPrintsValues() {
         String json = CliSupport.toJson(Map.of("command", "backtest"));
 
         assertThat(json).contains("\"command\": \"backtest\"");
     }
 
     @Test
-    void loadSeriesLoadsCsvAndAppliesTimeframeAndDateFilters() throws Exception {
+    public void loadSeriesLoadsCsvAndAppliesTimeframeAndDateFilters() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         BarSeries fullSeries = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null,
@@ -136,7 +136,7 @@ class CliSupportTest {
     }
 
     @Test
-    void loadSeriesSlicesSourceBarsBeforeResampling() throws Exception {
+    public void loadSeriesSlicesSourceBarsBeforeResampling() throws Exception {
         Path dataFile = copyResource("Binance-ETH-USD-PT5M-20230313_20230315.json");
         BarSeries source = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -160,7 +160,7 @@ class CliSupportTest {
     }
 
     @Test
-    void loadSeriesLoadsJsonFiles() throws Exception {
+    public void loadSeriesLoadsJsonFiles() throws Exception {
         Path dataFile = copyResource("Binance-ETH-USD-PT5M-20230313_20230315.json");
 
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
@@ -171,7 +171,7 @@ class CliSupportTest {
     }
 
     @Test
-    void loadSeriesRejectsUnsupportedFormatsAndEmptyResults() throws Exception {
+    public void loadSeriesRejectsUnsupportedFormatsAndEmptyResults() throws Exception {
         Path unsupportedFile = tempDir.resolve("bars.txt");
         Files.writeString(unsupportedFile, "unsupported");
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
@@ -185,7 +185,7 @@ class CliSupportTest {
     }
 
     @Test
-    void requireFiniteBarsRejectsNonFiniteObservableFields() {
+    public void requireFiniteBarsRejectsNonFiniteObservableFields() {
         BaseBarSeries nanClose = new BaseBarSeriesBuilder().withNumFactory(DoubleNumFactory.getInstance()).build();
         nanClose.barBuilder().timePeriod(Duration.ofDays(1)).endTime(Instant.EPOCH).closePrice(Double.NaN).add();
 
@@ -208,7 +208,7 @@ class CliSupportTest {
     }
 
     @Test
-    void buildExecutorConfiguresExecutionAndCostModels() throws Exception {
+    public void buildExecutorConfiguresExecutionAndCostModels() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -236,7 +236,7 @@ class CliSupportTest {
     }
 
     @Test
-    void buildExecutorRejectsUnsupportedExecutionModels() throws Exception {
+    public void buildExecutorRejectsUnsupportedExecutionModels() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -247,7 +247,7 @@ class CliSupportTest {
     }
 
     @Test
-    void resolveStakeUsesStakeThenCapitalAndDefaultsToNone() throws Exception {
+    public void resolveStakeUsesStakeThenCapitalAndDefaultsToNone() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -261,7 +261,7 @@ class CliSupportTest {
     }
 
     @Test
-    void fixedSizingInvestsTheCapitalAsCashRatherThanBuyingThatManyUnits() throws Exception {
+    public void fixedSizingInvestsTheCapitalAsCashRatherThanBuyingThatManyUnits() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -287,7 +287,7 @@ class CliSupportTest {
     }
 
     @Test
-    void resolveStakeRejectsInvalidSingleCapitalAndStakeValues() throws Exception {
+    public void resolveStakeRejectsInvalidSingleCapitalAndStakeValues() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -304,7 +304,7 @@ class CliSupportTest {
     }
 
     @Test
-    void resolveStakeEnforcesCapitalLimitAtFactoryPrecision() {
+    public void resolveStakeEnforcesCapitalLimitAtFactoryPrecision() {
         BaseBarSeries series = new BaseBarSeriesBuilder().withNumFactory(DecimalNumFactory.getInstance()).build();
 
         // 9007199254740993 parses to the same double as 9007199254740992, so a
@@ -317,7 +317,7 @@ class CliSupportTest {
     }
 
     @Test
-    void requireBoundedIndicatorWindowWorkClampsNormalizedNegativeWindows() {
+    public void requireBoundedIndicatorWindowWorkClampsNormalizedNegativeWindows() {
         double[] prices = new double[200];
         for (int bar = 0; bar < prices.length; bar++) {
             prices[bar] = 1d + bar;
@@ -332,7 +332,7 @@ class CliSupportTest {
     }
 
     @Test
-    void regressionDependenciesCountBothWindowScans() {
+    public void regressionDependenciesCountBothWindowScans() {
         BarSeries series = syntheticSeries(3);
         Indicator<Num> nested = new EMAIndicator(
                 new SimpleLinearRegressionIndicator(new ClosePriceIndicator(series), 50_000), 2);
@@ -342,7 +342,7 @@ class CliSupportTest {
     }
 
     @Test
-    void indicatorWindowWorkCoversExtremaRankAndStatisticsScans() {
+    public void indicatorWindowWorkCoversExtremaRankAndStatisticsScans() {
         BarSeries series = syntheticSeries(3);
         Indicator<Num> close = new ClosePriceIndicator(series);
         int window = 50_000;
@@ -362,7 +362,7 @@ class CliSupportTest {
     }
 
     @Test
-    void scannerWarmupOverflowCannotBypassWorkBudget() {
+    public void scannerWarmupOverflowCannotBypassWorkBudget() {
         BarSeries series = syntheticSeries(3);
         Indicator<Num> recursive = new EMAIndicator(new ClosePriceIndicator(series), 1_500_000_000);
         Indicator<Num> scanner = new HighestValueIndicator(recursive, 1_000_000_000);
@@ -371,7 +371,7 @@ class CliSupportTest {
     }
 
     @Test
-    void sweepBudgetIncludesMonteCarloRankingPaths() {
+    public void sweepBudgetIncludesMonteCarloRankingPaths() {
         List<CliSupport.CriterionSpec> criteria = CliSupport.resolveCriteria(
                 List.of("org.ta4j.core.criteria.drawdown.MonteCarloMaximumDrawdownCriterion"),
                 CliSupport.DEFAULT_SWEEP_CRITERIA);
@@ -381,7 +381,7 @@ class CliSupportTest {
     }
 
     @Test
-    void stdinCopyStopsAtByteCeilingWithoutDrainingInput() throws IOException {
+    public void stdinCopyStopsAtByteCeilingWithoutDrainingInput() throws IOException {
         Path target = tempDir.resolve("bounded-input.csv");
         ByteArrayInputStream input = new ByteArrayInputStream(new byte[32]);
 
@@ -394,7 +394,7 @@ class CliSupportTest {
     }
 
     @Test
-    void balanceAndKellySizingPreserveDecimalPrincipal() {
+    public void balanceAndKellySizingPreserveDecimalPrincipal() {
         NumFactory factory = DecimalNumFactory.getInstance();
         BarSeries series = syntheticSeries(factory, 1d, 1d);
         PositionSizer.Context context = new PositionSizer.Context(0, 0, factory.one(), sampleSweepStrategy(series),
@@ -410,7 +410,7 @@ class CliSupportTest {
     }
 
     @Test
-    void serializedFileReadRejectsOversizedInput() throws IOException {
+    public void serializedFileReadRejectsOversizedInput() throws IOException {
         Path file = tempDir.resolve("oversized-strategies.json");
         try (RandomAccessFile output = new RandomAccessFile(file.toFile(), "rw")) {
             output.setLength(CliSupport.MAX_SERIALIZED_INPUT_BYTES + 1L);
@@ -420,7 +420,7 @@ class CliSupportTest {
     }
 
     @Test
-    void strategyArrayStopsAtEntryCeilingDespiteOneValidStrategy() throws IOException {
+    public void strategyArrayStopsAtEntryCeilingDespiteOneValidStrategy() throws IOException {
         BarSeries series = syntheticSeries(10);
         Path file = tempDir.resolve("too-many-strategies.json");
         Files.writeString(file,
@@ -431,7 +431,7 @@ class CliSupportTest {
     }
 
     @Test
-    void criteriaArrayStopsAtEntryCeilingBeforeMaterializingAllEntries() throws IOException {
+    public void criteriaArrayStopsAtEntryCeilingBeforeMaterializingAllEntries() throws IOException {
         Path file = tempDir.resolve("too-many-criteria.json");
         String criterionJson = new NetProfitCriterion().toJson();
         Files.writeString(file,
@@ -442,7 +442,7 @@ class CliSupportTest {
     }
 
     @Test
-    void criteriaFileRejectsOversizedInputBeforeParsing() throws IOException {
+    public void criteriaFileRejectsOversizedInputBeforeParsing() throws IOException {
         Path file = tempDir.resolve("oversized-criteria.json");
         try (Writer output = Files.newBufferedWriter(file)) {
             output.write(new NetProfitCriterion().toJson());
@@ -457,7 +457,7 @@ class CliSupportTest {
     }
 
     @Test
-    void resolvePositionSizingSupportsFixedBalanceAndKellyModes() throws Exception {
+    public void resolvePositionSizingSupportsFixedBalanceAndKellyModes() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -482,7 +482,7 @@ class CliSupportTest {
     }
 
     @Test
-    void resolveCriteriaSupportsNamedExpressionsAndFullyQualifiedClasses() {
+    public void resolveCriteriaSupportsNamedExpressionsAndFullyQualifiedClasses() {
         List<CliSupport.CriterionSpec> defaults = CliSupport.resolveCriteria(List.of(),
                 CliSupport.DEFAULT_BACKTEST_CRITERIA);
         List<CliSupport.CriterionSpec> explicit = CliSupport.resolveCriteria(
@@ -504,7 +504,7 @@ class CliSupportTest {
     }
 
     @Test
-    void resolveCriteriaAcceptsLosslessJsonAndJsonArrayFiles() throws Exception {
+    public void resolveCriteriaAcceptsLosslessJsonAndJsonArrayFiles() throws Exception {
         SharpeRatioCriterion tradeSampled = new SharpeRatioCriterion(0.03d, SamplingFrequency.TRADE,
                 Annualization.ANNUALIZED, ZoneOffset.UTC);
         Path criteriaFile = tempDir.resolve("criteria.json");
@@ -521,7 +521,7 @@ class CliSupportTest {
     }
 
     @Test
-    void rejectedCriterionInputDoesNotRunStaticInitializer() {
+    public void rejectedCriterionInputDoesNotRunStaticInitializer() {
         InitializerProbe.initialized = false;
 
         assertThatThrownBy(() -> CliSupport.resolveCriteria(List.of(RejectedCriterionProbe.class.getName()),
@@ -531,7 +531,7 @@ class CliSupportTest {
     }
 
     @Test
-    void buildStrategySupportsNamedLabelsAndJsonDefinitions() throws Exception {
+    public void buildStrategySupportsNamedLabelsAndJsonDefinitions() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -561,7 +561,7 @@ class CliSupportTest {
     }
 
     @Test
-    void buildStrategySupportsNamedStrategyLabels() throws Exception {
+    public void buildStrategySupportsNamedStrategyLabels() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -573,7 +573,7 @@ class CliSupportTest {
     }
 
     @Test
-    void buildStrategyInitializesNamedStrategyRegistryBeforeJsonDeserialization() throws Exception {
+    public void buildStrategyInitializesNamedStrategyRegistryBeforeJsonDeserialization() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -594,7 +594,7 @@ class CliSupportTest {
     }
 
     @Test
-    void resolveStrategiesSupportsMixedInputsAndCollectsInvalidEntries() throws Exception {
+    public void resolveStrategiesSupportsMixedInputsAndCollectsInvalidEntries() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -617,7 +617,7 @@ class CliSupportTest {
     }
 
     @Test
-    void resolveStrategiesFailsFastWhenNoValidStrategiesRemain() throws Exception {
+    public void resolveStrategiesFailsFastWhenNoValidStrategiesRemain() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -632,7 +632,7 @@ class CliSupportTest {
     }
 
     @Test
-    void resolveStrategiesPropagatesIoErrorsFromStrategiesJsonFiles() {
+    public void resolveStrategiesPropagatesIoErrorsFromStrategiesJsonFiles() {
         BarSeries series = syntheticSeries(10);
         Path missingJsonFile = tempDir.resolve("missing-strategies.json");
 
@@ -643,7 +643,7 @@ class CliSupportTest {
     }
 
     @Test
-    void requireBoundedStrategyBatchRejectsOverBudgetBacktests() {
+    public void requireBoundedStrategyBatchRejectsOverBudgetBacktests() {
         BarSeries series = syntheticSeries(10_000);
         Strategy strategy = new BaseStrategy(BooleanRule.TRUE, BooleanRule.TRUE);
         List<Strategy> batch = new ArrayList<>(10_001);
@@ -658,7 +658,7 @@ class CliSupportTest {
     }
 
     @Test
-    void requireBoundedStrategyBatchAcceptsAtMostBudgetBatches() {
+    public void requireBoundedStrategyBatchAcceptsAtMostBudgetBatches() {
         BarSeries series = syntheticSeries(10_000);
         Strategy strategy = new BaseStrategy(BooleanRule.TRUE, BooleanRule.TRUE);
         List<Strategy> batch = new ArrayList<>(10_000);
@@ -670,7 +670,7 @@ class CliSupportTest {
     }
 
     @Test
-    void requireBoundedWalkForwardCountsFoldAndHoldoutTestBars() {
+    public void requireBoundedWalkForwardCountsFoldAndHoldoutTestBars() {
         BarSeries series = syntheticSeries(10_100);
         WalkForwardConfig config = CliSupport.buildWalkForwardConfig(series, "100", "1", "1", "0", "0", "9999", null,
                 null, null);
@@ -688,7 +688,7 @@ class CliSupportTest {
     }
 
     @Test
-    void requireBoundedWalkForwardBoundsActualSplitWork() {
+    public void requireBoundedWalkForwardBoundsActualSplitWork() {
         BarSeries series = syntheticSeries(10_000);
         WalkForwardConfig config = CliSupport.buildWalkForwardConfig(series, "100", "100", "100", "0", "0", "0", null,
                 null, null);
@@ -710,7 +710,7 @@ class CliSupportTest {
     }
 
     @Test
-    void strategyBatchChargesRollingWindowScansReachableFromSerializedRules() {
+    public void strategyBatchChargesRollingWindowScansReachableFromSerializedRules() {
         BarSeries series = syntheticSeries(10);
         ClosePriceIndicator close = new ClosePriceIndicator(series);
         Strategy scanner = Strategy.fromJson(series,
@@ -731,7 +731,7 @@ class CliSupportTest {
     }
 
     @Test
-    void walkForwardChargesMonteCarloCriteriaForTheBacktestAndEveryFold() {
+    public void walkForwardChargesMonteCarloCriteriaForTheBacktestAndEveryFold() {
         BarSeries series = syntheticSeries(1_000);
         WalkForwardConfig config = CliSupport.buildWalkForwardConfig(series, "100", "100", "100", "0", "0", "0", null,
                 null, null);
@@ -749,7 +749,7 @@ class CliSupportTest {
     }
 
     @Test
-    void walkForwardChargesRecursiveIndicatorPrefillOverEachFoldPrefix() {
+    public void walkForwardChargesRecursiveIndicatorPrefillOverEachFoldPrefix() {
         BarSeries longSeries = syntheticSeries(20_000);
         BarSeries shortSeries = syntheticSeries(2_000);
         WalkForwardConfig longConfig = CliSupport.buildWalkForwardConfig(longSeries, "100", "100", "100", "0", "0", "0",
@@ -783,7 +783,7 @@ class CliSupportTest {
 
     @ParameterizedTest
     @ValueSource(strings = { "PT0S", "P0D", "-P1D", "PT-1D", "PT60.5S", "PT0.5S", "PT1H" })
-    void timeframeRejectsNonPositiveSubSecondAndFinerThanSourceDurations(String timeframe) throws Exception {
+    public void timeframeRejectsNonPositiveSubSecondAndFinerThanSourceDurations(String timeframe) throws Exception {
         Path csv = copyResource("AAPL-PT1D-20130102_20131231.csv");
 
         // A non-positive period would never advance the aggregation loop.
@@ -794,7 +794,7 @@ class CliSupportTest {
     }
 
     @Test
-    void coarserTimeframeAggregatesDailyBars() throws Exception {
+    public void coarserTimeframeAggregatesDailyBars() throws Exception {
         Path csv = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries daily = CliSupport.loadSeries(csv.toString(), null, InputStream.nullInputStream(), null, null, null);
 
@@ -808,7 +808,7 @@ class CliSupportTest {
     @ParameterizedTest
     @ValueSource(strings = { "not-a-date,100,101,99,100.5,1000", "2026-01-01,100,101,99",
             "2026-01-01,100,\"101,99,100.5,1000" })
-    void malformedCsvRowsAreUsageErrorsNamingTheExpectedLayout(String row) throws Exception {
+    public void malformedCsvRowsAreUsageErrorsNamingTheExpectedLayout(String row) throws Exception {
         Path csv = tempDir.resolve("malformed.csv");
         Files.writeString(csv, "date,open,high,low,close,volume\n2026-01-01,100,101,99,100.5,1000\n" + row + "\n");
         TestLogCapture logs = new TestLogCapture();
@@ -825,7 +825,7 @@ class CliSupportTest {
     }
 
     @Test
-    void csvLoadingToleratesBlankLinesAndNonUtf8HeaderBytes() throws Exception {
+    public void csvLoadingToleratesBlankLinesAndNonUtf8HeaderBytes() throws Exception {
         Path csv = tempDir.resolve("windows-export.csv");
         Files.write(csv,
                 new byte[] { 'd', 'a', 't', 'e', (byte) 0xE9, ',', 'o', ',', 'h', ',', 'l', ',', 'c', ',', 'v', '\n' });
@@ -838,7 +838,7 @@ class CliSupportTest {
     }
 
     @Test
-    void stdinContentErrorsNameStdinRatherThanTheSpoolFile() {
+    public void stdinContentErrorsNameStdinRatherThanTheSpoolFile() {
         InputStream stdin = new ByteArrayInputStream(
                 "date,open,high,low,close,volume\nnot-a-date,1,1,1,1,1\n".getBytes(StandardCharsets.UTF_8));
         TestLogCapture logs = new TestLogCapture();
@@ -853,7 +853,7 @@ class CliSupportTest {
     }
 
     @Test
-    void jsonStdinIsValidatedAgainstTheSpooledCopyNotAFileNamedStdin() throws Exception {
+    public void jsonStdinIsValidatedAgainstTheSpooledCopyNotAFileNamedStdin() throws Exception {
         Path dataFile = copyResource("Binance-ETH-USD-PT5M-20230313_20230315.json");
         BarSeries fromFile = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -883,7 +883,7 @@ class CliSupportTest {
     }
 
     @Test
-    void buildStrategyRejectsUnknownLabels() throws Exception {
+    public void buildStrategyRejectsUnknownLabels() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -895,7 +895,7 @@ class CliSupportTest {
     }
 
     @Test
-    void buildSweepStrategiesBuildsCartesianProductsAndValidatesInputs() throws Exception {
+    public void buildSweepStrategiesBuildsCartesianProductsAndValidatesInputs() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -919,7 +919,7 @@ class CliSupportTest {
     }
 
     @Test
-    void sweepSkipsInvertedPairsOfOverlappingGridsAndFailsOnlyWithoutValidPairs() throws Exception {
+    public void sweepSkipsInvertedPairsOfOverlappingGridsAndFailsOnlyWithoutValidPairs() throws Exception {
         BarSeries series = syntheticSeries(100);
 
         CliSupport.SweepCandidates candidates = CliSupport.buildSweepStrategies(List.of(),
@@ -937,7 +937,7 @@ class CliSupportTest {
     }
 
     @Test
-    void resolveIndicatorSupportsInlineAndFileInputs() throws Exception {
+    public void resolveIndicatorSupportsInlineAndFileInputs() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -957,7 +957,7 @@ class CliSupportTest {
     }
 
     @Test
-    void buildIndicatorTestStrategySupportsDefaultAndThresholdModes() throws Exception {
+    public void buildIndicatorTestStrategySupportsDefaultAndThresholdModes() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -979,7 +979,7 @@ class CliSupportTest {
     }
 
     @Test
-    void buildIndicatorTestStrategyUsesResolvedIndicatorWithoutReReadingInput() throws Exception {
+    public void buildIndicatorTestStrategyUsesResolvedIndicatorWithoutReReadingInput() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -1001,7 +1001,7 @@ class CliSupportTest {
     }
 
     @Test
-    void buildIndicatorTestStrategyRejectsInvalidIndicatorAndThresholdInputs() throws Exception {
+    public void buildIndicatorTestStrategyRejectsInvalidIndicatorAndThresholdInputs() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -1029,7 +1029,7 @@ class CliSupportTest {
     }
 
     @Test
-    void buildIndicatorTestStrategyRejectsNonFiniteThresholds() throws Exception {
+    public void buildIndicatorTestStrategyRejectsNonFiniteThresholds() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -1047,7 +1047,7 @@ class CliSupportTest {
     }
 
     @Test
-    void forecastReportsExposeStateProvenanceAndEmpiricalPriceSupport() throws Exception {
+    public void forecastReportsExposeStateProvenanceAndEmpiricalPriceSupport() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -1078,7 +1078,7 @@ class CliSupportTest {
     }
 
     @Test
-    void buildRuleTestStrategySupportsNamedRuleLabelsAndJsonDefinitions() throws Exception {
+    public void buildRuleTestStrategySupportsNamedRuleLabelsAndJsonDefinitions() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -1105,7 +1105,7 @@ class CliSupportTest {
     }
 
     @Test
-    void buildRuleTestStrategyRejectsMissingAndUnknownRuleInputs() throws Exception {
+    public void buildRuleTestStrategyRejectsMissingAndUnknownRuleInputs() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -1122,7 +1122,7 @@ class CliSupportTest {
     }
 
     @Test
-    void buildWalkForwardConfigAndOptionalIntegerParsersApplyOverrides() throws Exception {
+    public void buildWalkForwardConfigAndOptionalIntegerParsersApplyOverrides() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -1146,7 +1146,7 @@ class CliSupportTest {
     }
 
     @Test
-    void parseUnstableBarsRejectsNegativeValues() {
+    public void parseUnstableBarsRejectsNegativeValues() {
         assertThat(CliSupport.parseUnstableBars(null)).isNull();
         assertThat(CliSupport.parseUnstableBars("7")).isEqualTo(7);
         assertThat(CliSupport.parseUnstableBars("0")).isZero();
@@ -1157,7 +1157,7 @@ class CliSupportTest {
     }
 
     @Test
-    void progressAndOutputHelpersWriteExpectedArtifacts() throws Exception {
+    public void progressAndOutputHelpersWriteExpectedArtifacts() throws Exception {
         StringWriter stderr = new StringWriter();
         PrintWriter err = new PrintWriter(stderr, true);
         Consumer<Integer> progress = CliSupport.progressCallback(true, err, "sweep", 30);
@@ -1185,7 +1185,7 @@ class CliSupportTest {
     }
 
     @Test
-    void invalidStrategyReportingAndRuntimeAggregationStayDeterministic() throws Exception {
+    public void invalidStrategyReportingAndRuntimeAggregationStayDeterministic() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -1214,7 +1214,7 @@ class CliSupportTest {
     }
 
     @Test
-    void reportHelpersSerializeBacktestAndWalkForwardResultsAndSaveCharts() throws Exception {
+    public void reportHelpersSerializeBacktestAndWalkForwardResultsAndSaveCharts() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,
                 null);
@@ -1288,7 +1288,7 @@ class CliSupportTest {
     }
 
     @Test
-    void seriesSha256CoversEveryObservableBarField() {
+    public void seriesSha256CoversEveryObservableBarField() {
         Instant endTime = Instant.parse("2020-01-02T00:00:00Z");
         String baseline = CliSupport.seriesSha256(seriesWithBar(endTime, Duration.ofDays(1), 7, 50));
 
@@ -1320,7 +1320,7 @@ class CliSupportTest {
     }
 
     @Test
-    void requireDistinctArtifactPathsIgnoresInputOnlyCollisions() {
+    public void requireDistinctArtifactPathsIgnoresInputOnlyCollisions() {
         String shared = tempDir.resolve("shared.csv").toString();
         Map<String, String> paths = new LinkedHashMap<>();
         paths.put("--data-file", shared);
@@ -1331,7 +1331,7 @@ class CliSupportTest {
     }
 
     @Test
-    void requireDistinctArtifactPathsStillRejectsWritableCollisions() {
+    public void requireDistinctArtifactPathsStillRejectsWritableCollisions() {
         String shared = tempDir.resolve("shared.csv").toString();
         Map<String, String> paths = new LinkedHashMap<>();
         paths.put("--data-file", shared);
@@ -1343,7 +1343,7 @@ class CliSupportTest {
     }
 
     @Test
-    void walkForwardToMapRecordsFailuresWhenEveryFoldFails() {
+    public void walkForwardToMapRecordsFailuresWhenEveryFoldFails() {
         BarSeries series = syntheticSeries(DecimalNumFactory.getInstance(), 1d, 2d, 3d, 4d, 5d, 6d);
         Strategy strategy = new BaseStrategy(BooleanRule.TRUE, BooleanRule.TRUE);
         WalkForwardConfig config = new WalkForwardConfig(2, 1, 1, 0, 0, 0, 1, List.of(1), 1, List.of(1), 7L);

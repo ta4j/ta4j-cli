@@ -33,7 +33,7 @@ class PerformanceComparisonTest {
     Path tempDir;
 
     @Test
-    void comparisonReportsChecksumMismatchInPayload() throws Exception {
+    public void comparisonReportsChecksumMismatchInPayload() throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         Path outputDir = tempDir.resolve("comparison");
@@ -48,7 +48,7 @@ class PerformanceComparisonTest {
     }
 
     @Test
-    void comparisonRejectsMismatchedExperimentInputs() throws Exception {
+    public void comparisonRejectsMismatchedExperimentInputs() throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         writePerformanceJson(baseDir, 16, 10L, 1_000L);
@@ -61,7 +61,7 @@ class PerformanceComparisonTest {
     }
 
     @Test
-    void comparisonRejectsMismatchedJvmOptions() throws Exception {
+    public void comparisonRejectsMismatchedJvmOptions() throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         writePerformanceJson(baseDir, 10L, 1_000L);
@@ -78,7 +78,7 @@ class PerformanceComparisonTest {
     }
 
     @Test
-    void comparisonIdentifiesMissingRequiredMetadata() throws Exception {
+    public void comparisonIdentifiesMissingRequiredMetadata() throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         writePerformanceJson(baseDir, 10L, 1_000L);
@@ -96,7 +96,7 @@ class PerformanceComparisonTest {
     }
 
     @Test
-    void comparisonRejectsEmptyArtifactShape() throws Exception {
+    public void comparisonRejectsEmptyArtifactShape() throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         writePerformanceJson(baseDir, 10L, 1_000L);
@@ -111,7 +111,7 @@ class PerformanceComparisonTest {
     }
 
     @Test
-    void comparisonRejectsMistypedArtifactField() throws Exception {
+    public void comparisonRejectsMistypedArtifactField() throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         writePerformanceJson(baseDir, 10L, 1_000L);
@@ -129,7 +129,7 @@ class PerformanceComparisonTest {
 
     @ParameterizedTest
     @ValueSource(strings = { "null", "{}", "0", "-3", "1.5", "\"16\"" })
-    void comparisonRejectsInvalidBarCountElements(String element) throws Exception {
+    public void comparisonRejectsInvalidBarCountElements(String element) throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         writePerformanceJson(baseDir, 10L, 1_000L);
@@ -147,7 +147,7 @@ class PerformanceComparisonTest {
 
     @ParameterizedTest
     @ValueSource(strings = { "null", "{}", "\"  \"", "7" })
-    void comparisonRejectsInvalidScenarioIdElements(String element) throws Exception {
+    public void comparisonRejectsInvalidScenarioIdElements(String element) throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         writePerformanceJson(baseDir, 10L, 1_000L);
@@ -164,7 +164,7 @@ class PerformanceComparisonTest {
     }
 
     @Test
-    void comparisonRejectsMalformedPerformanceArtifact() throws Exception {
+    public void comparisonRejectsMalformedPerformanceArtifact() throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         writePerformanceJson(baseDir, 10L, 1_000L);
@@ -179,7 +179,7 @@ class PerformanceComparisonTest {
     }
 
     @Test
-    void comparisonRejectsCrossHostArtifacts() throws Exception {
+    public void comparisonRejectsCrossHostArtifacts() throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         writePerformanceJson(baseDir, 10L, 1_000L);
@@ -196,7 +196,7 @@ class PerformanceComparisonTest {
     }
 
     @Test
-    void comparisonRejectsArtifactsWithDifferentOsVersions() throws Exception {
+    public void comparisonRejectsArtifactsWithDifferentOsVersions() throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         writePerformanceJson(baseDir, 10L, 1_000L);
@@ -213,7 +213,7 @@ class PerformanceComparisonTest {
     }
 
     @Test
-    void comparisonRejectsArtifactsWithUnknownHostIdOnBothSides() throws Exception {
+    public void comparisonRejectsArtifactsWithUnknownHostIdOnBothSides() throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         writePerformanceJson(baseDir, 10L, 1_000L);
@@ -228,7 +228,7 @@ class PerformanceComparisonTest {
     }
 
     @Test
-    void comparisonRejectsArtifactWithUnknownHostIdOnOneSide() throws Exception {
+    public void comparisonRejectsArtifactWithUnknownHostIdOnOneSide() throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         writePerformanceJson(baseDir, 10L, 1_000L);
@@ -249,7 +249,7 @@ class PerformanceComparisonTest {
     }
 
     @Test
-    void comparisonRejectsDuplicateResultCells() throws Exception {
+    public void comparisonRejectsDuplicateResultCells() throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         writePerformanceJson(baseDir, 10L, List.of(new ResultFixture(16, 1_000L), new ResultFixture(16, 900L)));
@@ -262,7 +262,7 @@ class PerformanceComparisonTest {
     }
 
     @Test
-    void comparisonWritesDeltasForMatchingArtifacts() throws Exception {
+    public void comparisonWritesDeltasForMatchingArtifacts() throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         Path outputDir = tempDir.resolve("comparison");
@@ -293,7 +293,7 @@ class PerformanceComparisonTest {
     }
 
     @Test
-    void comparisonReportsRegressionInPayloadInsteadOfThrowing() throws Exception {
+    public void comparisonReportsRegressionInPayloadInsteadOfThrowing() throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         Path outputDir = tempDir.resolve("comparison");
@@ -311,7 +311,7 @@ class PerformanceComparisonTest {
     }
 
     @Test
-    void comparisonReportsZeroBaselineRegressionInPayload() throws Exception {
+    public void comparisonReportsZeroBaselineRegressionInPayload() throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         Path outputDir = tempDir.resolve("comparison");
@@ -329,7 +329,7 @@ class PerformanceComparisonTest {
     }
 
     @Test
-    void comparisonReportsUnboundedScalingFromZero() throws Exception {
+    public void comparisonReportsUnboundedScalingFromZero() throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         Path outputDir = tempDir.resolve("comparison");
@@ -408,7 +408,7 @@ class PerformanceComparisonTest {
     }
 
     @Test
-    void comparisonRejectsOutputDirAliasingBaseDir() throws Exception {
+    public void comparisonRejectsOutputDirAliasingBaseDir() throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         writePerformanceJson(baseDir, 10L, 1_000L);
@@ -422,7 +422,7 @@ class PerformanceComparisonTest {
     }
 
     @Test
-    void comparisonRejectsOutputDirSymlinkAliasOfCandidateDir() throws Exception {
+    public void comparisonRejectsOutputDirSymlinkAliasOfCandidateDir() throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         writePerformanceJson(baseDir, 10L, 1_000L);
@@ -438,7 +438,7 @@ class PerformanceComparisonTest {
     }
 
     @Test
-    void comparisonRejectsCandidateDirAliasingBaseDir() throws Exception {
+    public void comparisonRejectsCandidateDirAliasingBaseDir() throws Exception {
         Path baseDir = tempDir.resolve("base");
         writePerformanceJson(baseDir, 10L, 1_000L);
         Path symlinkAlias = tempDir.resolve("base-alias");
@@ -456,7 +456,7 @@ class PerformanceComparisonTest {
     }
 
     @Test
-    void comparisonAllowsOutputDirNestedInsideBaseDir() throws Exception {
+    public void comparisonAllowsOutputDirNestedInsideBaseDir() throws Exception {
         Path baseDir = tempDir.resolve("base");
         Path candidateDir = tempDir.resolve("candidate");
         writePerformanceJson(baseDir, 10L, 1_000L);

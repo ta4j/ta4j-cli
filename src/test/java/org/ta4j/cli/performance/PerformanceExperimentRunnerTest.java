@@ -35,7 +35,7 @@ class PerformanceExperimentRunnerTest {
     Path tempDir;
 
     @Test
-    void worktreePathsDoNotMaskMeaningfulJvmOptionChanges() {
+    public void worktreePathsDoNotMaskMeaningfulJvmOptionChanges() {
         String base = PerformanceExperimentRunner
                 .fingerprintJvmOptions(List.of("-Dmaven.multiModuleProjectDirectory=/worktrees/base", "-Xmx2g"));
         String candidate = PerformanceExperimentRunner
@@ -48,14 +48,14 @@ class PerformanceExperimentRunnerTest {
     }
 
     @Test
-    void hostFingerprintRequiresAndDistinguishesProcessorIdentity() {
+    public void hostFingerprintRequiresAndDistinguishesProcessorIdentity() {
         assertNotEquals(PerformanceExperimentRunner.fingerprintHost("cloned-host", "processor-model-a"),
                 PerformanceExperimentRunner.fingerprintHost("cloned-host", "processor-model-b"));
         assertEquals("unknown", PerformanceExperimentRunner.fingerprintHost("cloned-host", ""));
     }
 
     @Test
-    void cliRejectsInvalidBarCounts() {
+    public void cliRejectsInvalidBarCounts() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> new PerformanceExperimentRunner.RunRequest("kalman-filter", List.of(0), List.of(), 1, 0,
                         Optional.empty(), false));
@@ -64,7 +64,7 @@ class PerformanceExperimentRunnerTest {
     }
 
     @Test
-    void runRequestSortsAndDeduplicatesBarCounts() {
+    public void runRequestSortsAndDeduplicatesBarCounts() {
         PerformanceExperimentRunner.RunRequest request = new PerformanceExperimentRunner.RunRequest("kalman-filter",
                 List.of(10000, 1000, 5000, 1000), List.of(), 1, 0, Optional.empty(), false);
 
@@ -72,7 +72,7 @@ class PerformanceExperimentRunnerTest {
     }
 
     @Test
-    void cliRejectsOversizedBarCounts() {
+    public void cliRejectsOversizedBarCounts() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> new PerformanceExperimentRunner.RunRequest("kalman-filter",
                         List.of(PerformanceExperimentRunner.MAX_BAR_COUNT + 1), List.of(), 1, 0, Optional.empty(),
@@ -83,7 +83,7 @@ class PerformanceExperimentRunnerTest {
     }
 
     @Test
-    void runRejectsUnboundedTotalWorkBeforeAnyScenarioRuns() {
+    public void runRejectsUnboundedTotalWorkBeforeAnyScenarioRuns() {
         Path outputDir = tempDir.resolve("oversized");
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
@@ -97,7 +97,7 @@ class PerformanceExperimentRunnerTest {
     }
 
     @Test
-    void commandOutputReturnsEmptyWhenProcessTimesOut() {
+    public void commandOutputReturnsEmptyWhenProcessTimesOut() {
         ProbeProcess process = new ProbeProcess(false, "late");
         Optional<String> output = PerformanceExperimentRunner.commandOutput(process, 100, TimeUnit.MILLISECONDS);
 
@@ -106,7 +106,7 @@ class PerformanceExperimentRunnerTest {
     }
 
     @Test
-    void commandOutputReturnsTrimmedOutputForSuccessfulProcess() {
+    public void commandOutputReturnsTrimmedOutputForSuccessfulProcess() {
         ProbeProcess process = new ProbeProcess(true, " ok ");
         Optional<String> output = PerformanceExperimentRunner.commandOutput(process, 5, TimeUnit.SECONDS);
 
@@ -163,7 +163,7 @@ class PerformanceExperimentRunnerTest {
     }
 
     @Test
-    void runnerRejectsUnknownScenarios() {
+    public void runnerRejectsUnknownScenarios() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> PerformanceExperimentRunner.run(new PerformanceExperimentRunner.RunRequest("kalman-filter",
                         List.of(16), List.of("missing"), 5, 1, Optional.of(tempDir.resolve("unknown")), false)));
@@ -174,17 +174,17 @@ class PerformanceExperimentRunnerTest {
     }
 
     @Test
-    void medianOfSortedReturnsMiddleValueForOddCounts() {
+    public void medianOfSortedReturnsMiddleValueForOddCounts() {
         assertEquals(2L, PerformanceExperimentRunner.medianOfSorted(List.of(1L, 2L, 3L)));
     }
 
     @Test
-    void medianOfSortedAveragesMiddleValuesForEvenCounts() {
+    public void medianOfSortedAveragesMiddleValuesForEvenCounts() {
         assertEquals(50_500_000L, PerformanceExperimentRunner.medianOfSorted(List.of(1_000_000L, 100_000_000L)));
     }
 
     @Test
-    void medianOfSortedDoesNotOverflowForLargeEvenCounts() {
+    public void medianOfSortedDoesNotOverflowForLargeEvenCounts() {
         assertEquals(Long.MAX_VALUE,
                 PerformanceExperimentRunner.medianOfSorted(List.of(Long.MAX_VALUE, Long.MAX_VALUE)));
         assertEquals(Long.MAX_VALUE - 1,
@@ -192,7 +192,7 @@ class PerformanceExperimentRunnerTest {
     }
 
     @Test
-    void runnerWritesReusableKalmanArtifacts() throws Exception {
+    public void runnerWritesReusableKalmanArtifacts() throws Exception {
         Path outputDir = tempDir.resolve("kalman");
 
         PerformanceExperimentRunner.RunArtifacts artifacts = PerformanceExperimentRunner
@@ -229,7 +229,7 @@ class PerformanceExperimentRunnerTest {
     @Test
     @Tag("benchmark")
     @EnabledIfSystemProperty(named = BENCHMARK_PROPERTY, matches = "true")
-    void benchmarkRunnerExecutesWhenExplicitlyEnabled() throws Exception {
+    public void benchmarkRunnerExecutesWhenExplicitlyEnabled() throws Exception {
         PerformanceExperimentRunner.run(new PerformanceExperimentRunner.RunRequest("kalman-filter", List.of(64),
                 List.of("sequential", "endOnly"), 1, 0, Optional.of(tempDir.resolve("benchmark")), false));
     }
