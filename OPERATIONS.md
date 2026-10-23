@@ -53,6 +53,8 @@ Batch execution does not silently ignore invalid input: opt into `--invalid-inpu
 
 For an upstream library comparison with one CLI harness, point both CLI refs at the same CLI commit and use `BENCHMARK_BASE_TA4J_REF` and `BENCHMARK_CANDIDATE_TA4J_REF`. The resolved upstream commits are recorded beside the base/candidate artifacts. `BENCHMARK_ORDER=base-first` is the default; repeat borderline results with `candidate-first`. Preserve the order file, source evidence, checksums, host/JVM metadata, and comparison JSON. The Kalman experiment synthesizes deterministic input internally; it does not read a main-repository dataset.
 
+Both shell helpers support stock macOS Bash 3.2, including invocations without extra Maven arguments or upstream-ref overrides. The quiet runner reports aggregate test totals for successful and failing Maven runs. A single-order comparison is diagnostic evidence, not an order-independent performance qualification; an automated qualification caller must run and require successful comparisons in both orders.
+
 ## Troubleshooting
 
 - Missing `org.ta4j` artifacts or parent POM: bootstrap the explicitly configured source revision into the same local Maven repository. A revision without all shared modules is incompatible, even if its version string matches.

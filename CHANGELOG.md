@@ -14,6 +14,11 @@
 - CLI ownership and release versioning move from the main ta4j reactor to [ta4j/ta4j-cli](https://github.com/ta4j/ta4j-cli). Existing `ta4jexamples.*` library package names remain unchanged in upstream shared artifacts.
 - Performance comparisons now use two standalone CLI refs, independently bootstrapped upstream revisions, and isolated per-side Maven repositories, with immutable prerequisite-source evidence retained beside the comparison.
 
+### Fixed
+
+- Quiet builds and performance comparisons accept empty optional argument lists on stock macOS Bash 3.2.
+- Quiet builds include failing Maven test summaries in their aggregate totals.
+
 ### Breaking
 
 - Build and invoke from the standalone repository root: replace the former reactor command `./mvnw -pl ta4j-cli -am package` with `./mvnw package` after installing the pinned upstream artifacts. The executable is now `target/ta4j-cli-1.0.0-SNAPSHOT-jar-with-dependencies.jar`, not a main-repository `ta4j-cli/target/` path. CLI-owned `@since` versions start at `1.0.0`; command names, options, response schemas, and upstream numerical behavior are preserved.

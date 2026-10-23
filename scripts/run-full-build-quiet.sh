@@ -65,7 +65,7 @@ printf 'Maven goals: %s\n' "${goals[*]}" >> "$log_file"
 # Job control gives Maven and its children their own process group so timeout
 # termination does not leave a Surefire JVM running after the gate exits.
 set -m
-./mvnw -B -ntp -Dstyle.color=never "${goals[@]}" "${maven_args[@]}" >> "$log_file" 2>&1 &
+./mvnw -B -ntp -Dstyle.color=never "${goals[@]}" ${maven_args[@]+"${maven_args[@]}"} >> "$log_file" 2>&1 &
 build_pid=$!
 set +m
 last_heartbeat="$start_time"
@@ -95,7 +95,7 @@ fi
 build_pid=''
 awk '/\[(WARNING|WARN|ERROR)\]/ || /(^|[[:space:]])(WARN|WARNING|ERROR|FATAL)([[:space:]:]|$)/ { print }' "$log_file"
 awk '
-  /^\[(INFO|WARNING)\] Tests run: [0-9]+, Failures: [0-9]+, Errors: [0-9]+, Skipped: [0-9]+[[:space:]]*$/ {
+  /^\[(INFO|WARNING|ERROR)\] Tests run: [0-9]+, Failures: [0-9]+, Errors: [0-9]+, Skipped: [0-9]+[[:space:]]*$/ {
     run += $4; failures += $6; errors += $8; skipped += $10; found = 1
   }
   END { if (found) printf "Tests run: %d, Failures: %d, Errors: %d, Skipped: %d\n", run, failures, errors, skipped }

@@ -178,7 +178,7 @@ build_ref() {
     bootstrap_args=(--ref "$source_ref")
   fi
   TA4J_SOURCE_EVIDENCE_FILE="$output_dir/$side-ta4j-source.txt" \
-    bash "$worktree/scripts/install-ta4j-prerequisites.sh" "${bootstrap_args[@]}" -- \
+    bash "$worktree/scripts/install-ta4j-prerequisites.sh" ${bootstrap_args[@]+"${bootstrap_args[@]}"} -- \
       -Dmaven.repo.local="$maven_repo"
   (
     cd "$worktree"
