@@ -1621,8 +1621,8 @@ class Ta4jCliTest {
         // The CLI routes operational logs to the process stderr, as in production;
         // keep them out of the build output while the command runs in-process.
         PrintStream processErr = System.err;
-        System.setErr(new PrintStream(OutputStream.nullOutputStream(), true, StandardCharsets.UTF_8));
-        try {
+        try (PrintStream mutedErr = new PrintStream(OutputStream.nullOutputStream(), true, StandardCharsets.UTF_8)) {
+            System.setErr(mutedErr);
             int exitCode = Ta4jCli.run(args, input, new PrintWriter(stdout, true), new PrintWriter(stderr, true));
             return new CliRunResult(exitCode, stdout.toString(), stderr.toString());
         } finally {
