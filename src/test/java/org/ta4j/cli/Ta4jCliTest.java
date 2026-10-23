@@ -1292,7 +1292,8 @@ class Ta4jCliTest {
 
     @ParameterizedTest
     @ValueSource(strings = { "strategy backtest", "strategy walk-forward", "indicator test", "rule test" })
-    public void reportingWorkflowsRejectMonteCarloCriteriaBeyondWorkCeilingBeforeScoring(String command) throws Exception {
+    public void reportingWorkflowsRejectMonteCarloCriteriaBeyondWorkCeilingBeforeScoring(String command)
+            throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         // The default 10,000 simulations over this year of weekly trades exceed the
         // sampled-bar ceiling for every reporting workflow.
