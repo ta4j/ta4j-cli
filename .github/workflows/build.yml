@@ -1,0 +1,75 @@
+name: Standalone Maven build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      ta4j_source_ref:
+        description: 'Explicit ta4j prerequisite commit/ref (empty uses .github/ta4j-source-ref)'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    env:
+      TA4J_SOURCE_REPOSITORY: ta4j/ta4j
+      TA4J_SOURCE_REF: ${{ inputs.ta4j_source_ref }}
+      TA4J_SOURCE_EVIDENCE_FILE: .agents/logs/ta4j-prerequisite-source.txt
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+      # The required 0.27.1-SNAPSHOT modules are not yet released/published.
+      # Fetch the explicit source ref, print its immutable commit, and install
+      # only the required reactor before building this independent repository.
+      - name: Install explicit ta4j prerequisite revision
+        shell: bash
+        run: bash scripts/install-ta4j-prerequisites.sh
+      - name: Verify standalone CLI (Unix)
+        if: runner.os != 'Windows'
+        shell: bash
+        env:
+          QUIET_BUILD_TIMEOUT_SECONDS: '1200'
+        run: bash scripts/run-full-build-quiet.sh --validate-only
+      - name: Verify standalone CLI (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        env:
+          QUIET_BUILD_TIMEOUT_SECONDS: '1200'
+        run: ./scripts/run-full-build-quiet.ps1 --validate-only
+      - name: Exercise packaged scalar workflows
+        shell: bash
+        run: |
+          java -jar target/ta4j-cli-1.0.0-SNAPSHOT-jar-with-dependencies.jar --version
+          java -jar target/ta4j-cli-1.0.0-SNAPSHOT-jar-with-dependencies.jar catalog --error-format JSON > target/catalog.json
+          java -jar target/ta4j-cli-1.0.0-SNAPSHOT-jar-with-dependencies.jar strategy backtest --data-file fixtures/AAPL-PT1D-20130102_20131231.csv --strategy 'SMA(7,21)' --chart target/backtest.jpg --output target/backtest.json --reproducible --error-format JSON
+          java -jar target/ta4j-cli-1.0.0-SNAPSHOT-jar-with-dependencies.jar indicator test --data-file fixtures/Binance-ETH-USD-PT5M-20230313_20230315.json --indicator 'RSI(14)' --output target/indicator.json --reproducible --error-format JSON
+      - name: Upload build evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cli-build-${{ matrix.os }}
+          include-hidden-files: true
+          path: |
+            .agents/logs/
+            target/surefire-reports/
+            target/site/jacoco/
+            target/spotbugsXml.xml
+            target/catalog.json
+            target/backtest.*
+            target/indicator.json
+            target/*-jar-with-dependencies.jar
+          if-no-files-found: warn

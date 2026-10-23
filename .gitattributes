@@ -1,0 +1,6 @@
+* text=auto
+mvnw text eol=lf
+*.sh text eol=lf
+*.ps1 text eol=lf
+*.cmd text eol=crlf
+.github/ta4j-source-ref text eol=lf

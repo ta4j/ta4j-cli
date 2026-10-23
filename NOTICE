@@ -1,0 +1,21 @@
+ta4j-cli source provenance
+
+This repository was extracted from ta4j/ta4j PR #1610 lineage at commit
+2b421c17eb8370a3f8eea576b99e30252e6dec3f:
+https://github.com/ta4j/ta4j/commit/2b421c17eb8370a3f8eea576b99e30252e6dec3f
+
+Initial application source, unit tests, command documentation, and the performance
+comparison helper originated in that commit's ta4j-cli/ directory. The Maven
+Wrapper, Eclipse formatter, SPDX header, Java review conventions, and author list
+originated in the same commit's repository-root configuration.
+
+The fixed owned fixtures were copied unchanged from that commit's
+ ta4j-examples/src/main/resources/AAPL-PT1D-20130102_20131231.csv
+ ta4j-examples/src/main/resources/Binance-ETH-USD-PT5M-20230313_20230315.json
+into fixtures/. They are regression/demo inputs, not a live-data service.
+
+Original MIT attribution is retained in LICENSE, AUTHORS, and source headers.
+The standalone CLI owns application composition and its independent release
+lifecycle. Reusable production library implementations remain owned by upstream
+ta4j-core, ta4j-data, ta4j-charting, and ta4j-catalog; existing ta4jexamples.* package
+names are intentionally retained by those upstream artifacts for compatibility.
