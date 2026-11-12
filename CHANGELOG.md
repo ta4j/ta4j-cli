@@ -1,0 +1,25 @@
+# Changelog
+
+## Unreleased
+
+### Added
+
+- Standalone `org.ta4j:ta4j-cli:1.0.0-SNAPSHOT` application with an independent Java 25/Maven build and executable dependency-inclusive JAR.
+- Preserved local CSV/JSON strategy backtest, walk-forward, bounded SMA sweep, indicator/rule exploration, forecasting, catalog discovery, completion, and deterministic performance-experiment workflows from ta4j PR #1610.
+- Explicit dependencies on `ta4j-core` and `ta4j-examples` at `0.28.1-SNAPSHOT`, with isolated source-ref bootstrap while those snapshots remain unpublished.
+- Owned regression/demo CSV and JSON fixtures, Maven-native quality checks, Unix/PowerShell quiet gates, and Linux/Windows CI with packaged scalar-workflow smoke coverage.
+
+### Changed
+
+- CLI ownership and release versioning move from the main ta4j reactor to [ta4j/ta4j-cli](https://github.com/ta4j/ta4j-cli). Reused `ta4jexamples.*` data source, charting, rule, and strategy classes come from the upstream `ta4j-examples` artifact.
+- Performance comparisons now use two standalone CLI refs, independently bootstrapped upstream revisions, and isolated per-side Maven repositories, with immutable prerequisite-source evidence retained beside the comparison.
+
+### Fixed
+
+- Quiet builds and performance comparisons accept empty optional argument lists on stock macOS Bash 3.2.
+- Quiet builds include failing Maven test summaries in their aggregate totals.
+- Under `--error-format JSON`, stderr is now a JSON Lines stream: `--progress` messages are one-line `{"event":"progress",...}` objects, the error envelope is written on a single line, and free-text `--invalid-input skip` warnings are omitted (skipped inputs remain in the response payload). Previously plain-text lines could precede the envelope and make stderr unparseable.
+
+### Breaking
+
+- Build and invoke from the standalone repository root: replace the former reactor command `./mvnw -pl ta4j-cli -am package` with `./mvnw package` after installing the pinned upstream artifacts. The executable is now `target/ta4j-cli-1.0.0-SNAPSHOT-jar-with-dependencies.jar`, not a main-repository `ta4j-cli/target/` path. CLI-owned `@since` versions start at `1.0.0`; command names, options, response schemas, and upstream numerical behavior are preserved.
