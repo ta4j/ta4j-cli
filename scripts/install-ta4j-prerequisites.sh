@@ -9,7 +9,7 @@ if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
 Usage: scripts/install-ta4j-prerequisites.sh [--ref <source-ref>] [-- Maven arguments...]
 
 Fetch the configured ta4j repository/ref into a temporary isolated checkout and
-install ta4j-core, ta4j-data, ta4j-charting and ta4j-catalog plus their parent.
+install ta4j-core and ta4j-examples plus their parent.
 No existing ta4j checkout or published SNAPSHOT is assumed. Maven runs the
 upstream default tests and verification; no native provider is selected.
 
@@ -48,14 +48,14 @@ if [[ -n "${TA4J_SOURCE_EVIDENCE_FILE:-}" ]]; then
   mkdir -p "$(dirname "$TA4J_SOURCE_EVIDENCE_FILE")"
   printf 'repository=%s\nrequestedRef=%s\ncommit=%s\n' "$source_repository" "$source_ref" "$source_commit" > "$TA4J_SOURCE_EVIDENCE_FILE"
 fi
-for module in ta4j-core ta4j-data ta4j-charting ta4j-catalog; do
+for module in ta4j-core ta4j-examples; do
   if [[ ! -f "$checkout/$module/pom.xml" ]]; then
-    printf 'error: %s@%s lacks %s; select a revision containing the shared-library extraction\n' \
+    printf 'error: %s@%s lacks %s; select a revision containing both modules\n' \
       "$source_repository" "$source_commit" "$module" >&2
     exit 1
   fi
 done
 (
   cd "$checkout"
-  ./mvnw -B -ntp -pl ta4j-core,ta4j-data,ta4j-charting,ta4j-catalog -am install "$@"
+  ./mvnw -B -ntp -pl ta4j-core,ta4j-examples -am install "$@"
 )

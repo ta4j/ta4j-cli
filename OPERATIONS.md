@@ -2,13 +2,13 @@
 
 ## Build provenance and compatibility
 
-`1.0.0-SNAPSHOT` uses JDK 25 as its build/quality-tool baseline and exactly `0.27.1-SNAPSHOT` of `ta4j-core`, `ta4j-data`, `ta4j-charting`, and `ta4j-catalog`. Shared-module extraction is currently an explicit upstream source prerequisite. No older release or GPU execution is qualified here.
+`1.0.0-SNAPSHOT` uses JDK 25 as its build/quality-tool baseline and exactly `0.28.1-SNAPSHOT` of `ta4j-core` and `ta4j-examples`. That unpublished snapshot is currently an explicit upstream source prerequisite. No older release or GPU execution is qualified here.
 
 For an isolated checkout without installed artifacts:
 
 ```bash
 TA4J_SOURCE_EVIDENCE_FILE=.agents/logs/ta4j-prerequisite-source.txt \
-  bash scripts/install-ta4j-prerequisites.sh --ref <upstream-commit-containing-the-shared-modules>
+  bash scripts/install-ta4j-prerequisites.sh --ref <upstream-commit>
 QUIET_BUILD_TIMEOUT_SECONDS=1200 bash scripts/run-full-build-quiet.sh --validate-only
 ```
 

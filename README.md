@@ -21,11 +21,11 @@ Requirements: JDK 25, Git, and the included Maven Wrapper (Maven 3.9+). Run comm
 
 | CLI | Required upstream libraries | Status |
 | --- | --- | --- |
-| `1.0.0-SNAPSHOT` | `org.ta4j:ta4j-core`, `ta4j-data`, `ta4j-charting`, `ta4j-catalog`, all `0.27.1-SNAPSHOT` | Source prerequisite; shared-module extraction is not yet a released/published compatibility baseline |
+| `1.0.0-SNAPSHOT` | `org.ta4j:ta4j-core`, `ta4j-examples`, both `0.28.1-SNAPSHOT` | Source prerequisite; not yet a released/published compatibility baseline |
 
-The CLI has its own version and standalone POM: it does not inherit the ta4j Maven parent, consume the examples artifact, or use the core internal test JAR. The shared modules retain their `ta4jexamples.*` package names for compatibility; those imports do not imply an examples-artifact dependency.
+The CLI has its own version and standalone POM: it does not inherit the ta4j Maven parent or use the core internal test JAR. Its `ta4jexamples.*` imports (data sources, charting, rules, strategies) come from the `ta4j-examples` artifact.
 
-Until all four pinned artifacts and their ta4j parent POM are published, install them from an explicit upstream source revision:
+Until both pinned artifacts and their ta4j parent POM are published, install them from an explicit upstream source revision:
 
 ```bash
 git clone https://github.com/ta4j/ta4j-cli.git
@@ -34,7 +34,7 @@ bash scripts/install-ta4j-prerequisites.sh
 ./mvnw package
 ```
 
-The bootstrap uses `ta4j/ta4j` and the immutable foundation commit in [`.github/ta4j-source-ref`](.github/ta4j-source-ref). This source revision contains the unmerged shared-library extraction and must be available from the explicit source repository before remote CI can fetch it. The bootstrap fetches an isolated temporary checkout, prints the resolved commit, and installs only the required library reactor with upstream tests enabled. It never searches for a sibling checkout. For another explicit revision, use `bash scripts/install-ta4j-prerequisites.sh --ref <commit-or-ref>`; `TA4J_SOURCE_REPOSITORY` selects a GitHub owner/repository. Both local setup and CI use this same bootstrap. A ref predating shared-module extraction fails with a prerequisite error rather than silently claiming released support.
+The bootstrap uses `ta4j/ta4j` and the immutable foundation commit in [`.github/ta4j-source-ref`](.github/ta4j-source-ref). This source revision is the head of the unmerged upstream prerequisite (ta4j/ta4j#1610) and must be available from the explicit source repository before remote CI can fetch it. The bootstrap fetches an isolated temporary checkout, prints the resolved commit, and installs only the required library reactor with upstream tests enabled. It never searches for a sibling checkout. For another explicit revision, use `bash scripts/install-ta4j-prerequisites.sh --ref <commit-or-ref>`; `TA4J_SOURCE_REPOSITORY` selects a GitHub owner/repository. Both local setup and CI use this same bootstrap. A ref missing either module fails with a prerequisite error rather than silently claiming released support.
 
 On Windows, run the bootstrap in Git Bash, then use `.\mvnw.cmd package` from PowerShell 7+. Once the exact pinned dependencies are already installed or published, the bootstrap is unnecessary.
 

@@ -17,4 +17,4 @@
 ## Documentation
 
 - [ ] Changelog and relevant usage/operator docs updated, or unchanged rationale supplied.
-- [ ] No implicit sibling checkout, examples production dependency, internal ta4j test JAR, or bundled mandatory native provider.
+- [ ] No implicit sibling checkout, internal ta4j test JAR, or bundled mandatory native provider.

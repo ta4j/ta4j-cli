@@ -17,5 +17,5 @@ into fixtures/. They are regression/demo inputs, not a live-data service.
 Original MIT attribution is retained in LICENSE, AUTHORS, and source headers.
 The standalone CLI owns application composition and its independent release
 lifecycle. Reusable production library implementations remain owned by upstream
-ta4j-core, ta4j-data, ta4j-charting, and ta4j-catalog; existing ta4jexamples.* package
-names are intentionally retained by those upstream artifacts for compatibility.
+ta4j-core and ta4j-examples (ta4jexamples.* data sources, charting, rules, and
+strategies); the CLI does not copy them.

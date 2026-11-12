@@ -32,7 +32,7 @@ jobs:
           distribution: temurin
           java-version: '25'
           cache: maven
-      # The required 0.27.1-SNAPSHOT modules are not yet released/published.
+      # The required 0.28.1-SNAPSHOT modules are not yet released/published.
       # Fetch the explicit source ref, print its immutable commit, and install
       # only the required reactor before building this independent repository.
       - name: Install explicit ta4j prerequisite revision

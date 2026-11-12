@@ -37,7 +37,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.release>25</maven.compiler.release>
-        <ta4j.version>0.27.1-SNAPSHOT</ta4j.version>
+        <ta4j.version>0.28.1-SNAPSHOT</ta4j.version>
         <picocli.version>4.7.7</picocli.version>
         <gson.version>2.14.0</gson.version>
         <jfreechart.version>1.5.6</jfreechart.version>
@@ -61,17 +61,7 @@
         </dependency>
         <dependency>
             <groupId>org.ta4j</groupId>
-            <artifactId>ta4j-data</artifactId>
-            <version>${ta4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.ta4j</groupId>
-            <artifactId>ta4j-charting</artifactId>
-            <version>${ta4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.ta4j</groupId>
-            <artifactId>ta4j-catalog</artifactId>
+            <artifactId>ta4j-examples</artifactId>
             <version>${ta4j.version}</version>
         </dependency>
         <dependency>
