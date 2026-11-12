@@ -179,7 +179,7 @@ cat fixtures/AAPL-PT1D-20130102_20131231.csv | java -jar target/ta4j-cli-1.0.0-S
 - Monte Carlo drawdown criteria are bounded before any command runs: simulations × sampled bars across every scored result (each backtest, fold and holdout, plus sweep ranking) must not exceed 100,000,000.
 - `--output`: JSON file path. When omitted, JSON is written to stdout.
 - `--chart`: optional JPEG output path for a trading chart artifact.
-- `--progress`: emit bounded progress messages (`completed/total` where known, always including the final count) to stderr.
+- `--progress`: emit bounded progress messages (`completed/total` where known, always including the final count) to stderr. Ignored with `--error-format JSON`, so stderr carries only the JSON error envelope.
 - Logging: operational diagnostics are written to stderr; stdout carries only the JSON command response.
 - `--reproducible`: omit volatile `run` metadata.
 - `--unstable-bars`: override the strategy unstable-bar count.

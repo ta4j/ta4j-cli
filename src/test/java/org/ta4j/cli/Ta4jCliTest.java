@@ -1071,6 +1071,20 @@ class Ta4jCliTest {
     }
 
     @Test
+    public void jsonErrorFormatSuppressesPlainTextProgress() throws Exception {
+        Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
+        Path chartDirectory = Files.createDirectories(tempDir.resolve("chart-is-a-directory"));
+
+        CliRunResult result = runCliAllowingError("strategy", "backtest", "--data-file", dataFile.toString(),
+                "--strategy", "SMA(7,21)", "--progress", "--chart", chartDirectory.toString(), "--error-format",
+                "JSON");
+
+        assertThat(result.exitCode()).isNotZero();
+        assertThat(result.stderr()).doesNotContain("progress:");
+        assertThat(JsonParser.parseString(result.stderr().strip()).isJsonObject()).isTrue();
+    }
+
+    @Test
     public void reproduciblePartialOutputOmitsInvalidStrategyFilePaths() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,

@@ -114,7 +114,9 @@ public final class Ta4jCli implements Runnable {
     }
 
     static int run(String[] args, InputStream input, PrintWriter out, PrintWriter err) {
-        configureQuietLogging(requestsJsonErrorFormat(args));
+        boolean jsonErrors = requestsJsonErrorFormat(args);
+        configureQuietLogging(jsonErrors);
+        CliSupport.setProgressSuppressed(jsonErrors);
         CommandLine commandLine = new CommandLine(new Ta4jCli(input));
         commandLine.setCaseInsensitiveEnumValuesAllowed(true);
         commandLine.setOut(out);

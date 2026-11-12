@@ -339,7 +339,7 @@ final class CliCommands {
         @Option(names = "--chart", paramLabel = "<jpeg-path>", description = "Optional JPEG chart output path.")
         String chart;
 
-        @Option(names = "--progress", description = "Emit bounded progress messages to stderr.")
+        @Option(names = "--progress", description = "Emit bounded progress messages to stderr (ignored with --error-format JSON).")
         boolean progress;
 
         @Option(names = "--reproducible", description = "Omit timestamps, paths, and timing metadata from JSON output.")
