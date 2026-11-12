@@ -1702,16 +1702,6 @@ final class CliSupport {
     }
 
     /**
-     * Set while a JSON error format run is active: stderr must then carry only the
-     * single JSON error envelope, so plain-text progress lines are dropped.
-     */
-    private static volatile boolean progressSuppressed;
-
-    static void setProgressSuppressed(boolean suppressed) {
-        progressSuppressed = suppressed;
-    }
-
-    /**
      * Returns a progress callback printing the first, every 25th and the final
      * completion, or {@code null} when progress is disabled.
      *
@@ -1725,9 +1715,6 @@ final class CliSupport {
     }
 
     static void reportProgress(PrintWriter err, String label, int completed, int total) {
-        if (progressSuppressed) {
-            return;
-        }
         if (completed == 1 || completed % 25 == 0 || completed == total) {
             if (total > 0) {
                 err.printf("%s progress: %d/%d%n", label, completed, total);

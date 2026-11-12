@@ -18,7 +18,7 @@
 
 - Quiet builds and performance comparisons accept empty optional argument lists on stock macOS Bash 3.2.
 - Quiet builds include failing Maven test summaries in their aggregate totals.
-- `--progress` no longer writes plain-text lines to stderr under `--error-format JSON`, so stderr stays a single parseable JSON envelope.
+- Under `--error-format JSON`, command diagnostics (`--progress` lines and `--invalid-input skip` warnings) are no longer written to stderr, so stderr stays a single parseable JSON envelope. Skipped inputs remain in the response payload.
 
 ### Breaking
 

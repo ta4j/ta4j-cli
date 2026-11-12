@@ -191,7 +191,7 @@ cat fixtures/AAPL-PT1D-20130102_20131231.csv | java -jar target/ta4j-cli-1.0.0-S
   - `--strategies`: one or more `NamedStrategy` labels. You may repeat the flag or pass a comma-separated list such as `HourOfDayStrategy_9_17,DayOfWeekStrategy_MONDAY_FRIDAY`.
   - `--strategy-json-file`: path to one serialized ta4j strategy payload.
   - `--strategies-json-file`: path to a JSON file containing an array of one or more serialized ta4j strategy objects.
-  - `--invalid-input`: `fail` (default) or explicit partial-execution `skip`.
+  - `--invalid-input`: `fail` (default) or explicit partial-execution `skip`. With `--error-format JSON`, the skip warnings are not printed to stderr; skipped inputs are listed in the response.
   - total evaluation work is bounded before execution: strategies × bars must not exceed 100,000,000 bar-strategy evaluations. Each strategy also pays for rolling-scanner windows (for example `HighestValue` over 2,000 bars costs 2,001 per bar) and repeated child-rule calls. `ChainRule` links charge `threshold + 1` child evaluations; `AndWithThresholdRule` and `OrWithThresholdRule` charge up to `threshold` calls to each child, including nested scanner work.
   - strategy inputs are self-contained, so `strategy backtest` does not accept `--param`.
 - `strategy walk-forward`

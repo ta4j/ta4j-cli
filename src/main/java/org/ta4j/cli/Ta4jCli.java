@@ -109,6 +109,15 @@ public final class Ta4jCli implements Runnable {
         }
     }
 
+    private static volatile boolean jsonErrorRun;
+
+    /**
+     * Returns whether the current run requested {@code --error-format JSON}.
+     */
+    static boolean jsonErrorRun() {
+        return jsonErrorRun;
+    }
+
     static int run(String[] args, PrintWriter out, PrintWriter err) {
         return run(args, System.in, out, err);
     }
@@ -116,7 +125,7 @@ public final class Ta4jCli implements Runnable {
     static int run(String[] args, InputStream input, PrintWriter out, PrintWriter err) {
         boolean jsonErrors = requestsJsonErrorFormat(args);
         configureQuietLogging(jsonErrors);
-        CliSupport.setProgressSuppressed(jsonErrors);
+        jsonErrorRun = jsonErrors;
         CommandLine commandLine = new CommandLine(new Ta4jCli(input));
         commandLine.setCaseInsensitiveEnumValuesAllowed(true);
         commandLine.setOut(out);

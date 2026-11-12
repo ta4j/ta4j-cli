@@ -1085,6 +1085,19 @@ class Ta4jCliTest {
     }
 
     @Test
+    public void jsonErrorFormatSuppressesSkippedInputWarnings() throws Exception {
+        Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
+
+        CliRunResult result = runCliAllowingError("strategy", "backtest", "--data-file", dataFile.toString(),
+                "--strategies", "SMA(7,21),MissingStrategy_VALUE", "--invalid-input", "skip", "--execution-model",
+                "invalid", "--error-format", "JSON");
+
+        assertThat(result.exitCode()).isNotZero();
+        assertThat(result.stderr()).doesNotContain("Skipping invalid strategy inputs");
+        assertThat(JsonParser.parseString(result.stderr().strip()).isJsonObject()).isTrue();
+    }
+
+    @Test
     public void reproduciblePartialOutputOmitsInvalidStrategyFilePaths() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         BarSeries series = CliSupport.loadSeries(dataFile.toString(), null, InputStream.nullInputStream(), null, null,

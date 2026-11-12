@@ -64,6 +64,8 @@ final class CliCommands {
     @Command
     abstract static class WorkflowCommand implements Callable<Integer> {
 
+        private static final PrintWriter DISCARDING_WRITER = new PrintWriter(java.io.Writer.nullWriter());
+
         @Spec
         private CommandSpec spec;
 
@@ -71,7 +73,16 @@ final class CliCommands {
             return spec.commandLine().getOut();
         }
 
+        /**
+         * Returns the writer for command diagnostics (progress, skipped-input
+         * warnings). Under {@code --error-format JSON} stderr must carry only the
+         * single JSON error envelope written by the exception handlers, so diagnostics
+         * are discarded there.
+         */
         final PrintWriter err() {
+            if (Ta4jCli.jsonErrorRun()) {
+                return DISCARDING_WRITER;
+            }
             return spec.commandLine().getErr();
         }
 
