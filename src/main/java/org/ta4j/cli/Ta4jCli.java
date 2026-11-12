@@ -216,8 +216,8 @@ public final class Ta4jCli implements Runnable {
         // picocli stops at the first bad token, so a later --error-format may not
         // have been applied yet; honor it from the raw arguments as well.
         if (rootCommand(commandLine).errorFormat == ErrorFormat.JSON || requestsJsonErrorFormat(args)) {
-            err.println(CliSupport
-                    .toJson(errorPayload(commandLine, "usage", CommandLine.ExitCode.USAGE, exception.getMessage())));
+            err.println(CliSupport.toJsonLine(
+                    errorPayload(commandLine, "usage", CommandLine.ExitCode.USAGE, exception.getMessage())));
         } else {
             err.println(exception.getMessage());
             if (exception instanceof CommandLine.UnmatchedArgumentException unmatched) {
@@ -250,7 +250,7 @@ public final class Ta4jCli implements Runnable {
         PrintWriter err = commandLine.getErr();
         Ta4jCli root = rootCommand(commandLine);
         if (root.errorFormat == ErrorFormat.JSON) {
-            err.println(CliSupport.toJson(errorPayload(commandLine, category, exitCode, message)));
+            err.println(CliSupport.toJsonLine(errorPayload(commandLine, category, exitCode, message)));
         } else {
             err.println(message);
         }

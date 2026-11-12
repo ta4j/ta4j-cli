@@ -1071,7 +1071,7 @@ class Ta4jCliTest {
     }
 
     @Test
-    public void jsonErrorFormatSuppressesPlainTextProgress() throws Exception {
+    public void jsonErrorFormatEmitsProgressAsJsonLines() throws Exception {
         Path dataFile = copyResource("AAPL-PT1D-20130102_20131231.csv");
         Path chartDirectory = Files.createDirectories(tempDir.resolve("chart-is-a-directory"));
 
@@ -1080,8 +1080,19 @@ class Ta4jCliTest {
                 "JSON");
 
         assertThat(result.exitCode()).isNotZero();
-        assertThat(result.stderr()).doesNotContain("progress:");
-        assertThat(JsonParser.parseString(result.stderr().strip()).isJsonObject()).isTrue();
+        List<JsonObject> records = result.stderr()
+                .lines()
+                .map(line -> JsonParser.parseString(line).getAsJsonObject())
+                .toList();
+        assertThat(records).hasSizeGreaterThanOrEqualTo(2);
+        JsonObject progress = records.getFirst();
+        assertThat(progress.get("event").getAsString()).isEqualTo("progress");
+        assertThat(progress.get("command").getAsString()).isEqualTo("strategy backtest");
+        assertThat(progress.get("completed").getAsInt()).isEqualTo(1);
+        assertThat(progress.get("total").getAsInt()).isEqualTo(1);
+        JsonObject envelope = records.getLast();
+        assertThat(envelope.get("status").getAsString()).isEqualTo("error");
+        assertThat(envelope.has("event")).isFalse();
     }
 
     @Test

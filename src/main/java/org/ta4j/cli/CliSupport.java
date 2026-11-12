@@ -206,12 +206,21 @@ final class CliSupport {
             .serializeNulls()
             .setPrettyPrinting()
             .create();
+    private static final Gson COMPACT_GSON = new GsonBuilder().disableHtmlEscaping().serializeNulls().create();
 
     private CliSupport() {
     }
 
     static String toJson(Object value) {
         return GSON.toJson(value);
+    }
+
+    /**
+     * Serializes {@code value} as a single-line JSON object, for stderr records
+     * under {@code --error-format JSON} (one JSON object per line).
+     */
+    static String toJsonLine(Object value) {
+        return COMPACT_GSON.toJson(value);
     }
 
     static BarSeries loadSeries(String dataFile, String dataFormat, InputStream input, String timeframeToken,
@@ -1716,7 +1725,16 @@ final class CliSupport {
 
     static void reportProgress(PrintWriter err, String label, int completed, int total) {
         if (completed == 1 || completed % 25 == 0 || completed == total) {
-            if (total > 0) {
+            if (Ta4jCli.jsonErrorRun()) {
+                Map<String, Object> event = new LinkedHashMap<>();
+                event.put("event", "progress");
+                event.put("command", label);
+                event.put("completed", completed);
+                if (total > 0) {
+                    event.put("total", total);
+                }
+                err.println(toJsonLine(event));
+            } else if (total > 0) {
                 err.printf("%s progress: %d/%d%n", label, completed, total);
             } else {
                 err.printf("%s progress: %d%n", label, completed);

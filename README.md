@@ -137,7 +137,7 @@ Every workflow response uses a versioned envelope with `schemaVersion`, `status`
 
 `performance compare` exits non-zero when the candidate exceeds `--max-regression-pct` or its checksums diverge, so exit-code-based automation and CI can gate on the result while the comparison artifacts remain inspectable. A failing gate reports envelope `status: "error"` while the nested comparison keeps its own `result.status: "regression"`, so callers can distinguish a gated result from a crash. Batch executions report `status: "partial"` when some strategy inputs or folds failed but others succeeded, and `status: "error"` only when every member failed; per-failure detail is additive in `failedStrategies` / `failedStrategyCount` and `failedFoldCount` / `foldFailures` without dropping healthy results. When every member failed and the response went to `--output`, the command also reports the failure on stderr (exit 1, category `execution`).
 
-Use `--error-format JSON` (anywhere on the command line) for structured error envelopes with `usage` (exit 2), `io` (exit 74), `execution` or `software` (exit 1) categories; the envelope's `command` matches the success envelope's. Error messages keep the offending input and the underlying ta4j reason. `catalog` reports aliases and supported models directly from the live registry, while `completion --shell bash` emits completion usable by Bash and by Zsh through `bashcompinit`.
+Use `--error-format JSON` (anywhere on the command line) to make stderr a JSON Lines stream: every line is one JSON object, either a `--progress` event (`"event": "progress"`) or, last, the error envelope. Free-text diagnostics such as skipped-input warnings are omitted in this mode. Error envelopes carry `usage` (exit 2), `io` (exit 74), `execution` or `software` (exit 1) categories; the envelope's `command` matches the success envelope's. Error messages keep the offending input and the underlying ta4j reason. `catalog` reports aliases and supported models directly from the live registry, while `completion --shell bash` emits completion usable by Bash and by Zsh through `bashcompinit`.
 
 ```json
 {
@@ -179,7 +179,7 @@ cat fixtures/AAPL-PT1D-20130102_20131231.csv | java -jar target/ta4j-cli-1.0.0-S
 - Monte Carlo drawdown criteria are bounded before any command runs: simulations × sampled bars across every scored result (each backtest, fold and holdout, plus sweep ranking) must not exceed 100,000,000.
 - `--output`: JSON file path. When omitted, JSON is written to stdout.
 - `--chart`: optional JPEG output path for a trading chart artifact.
-- `--progress`: emit bounded progress messages (`completed/total` where known, always including the final count) to stderr. Ignored with `--error-format JSON`, so stderr carries only the JSON error envelope.
+- `--progress`: emit bounded progress messages (`completed/total` where known, always including the final count) to stderr. With `--error-format JSON`, each progress message is instead a one-line JSON object such as `{"event":"progress","command":"strategy sweep","completed":25,"total":40}` (`total` is omitted when unknown).
 - Logging: operational diagnostics are written to stderr; stdout carries only the JSON command response.
 - `--reproducible`: omit volatile `run` metadata.
 - `--unstable-bars`: override the strategy unstable-bar count.

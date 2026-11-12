@@ -73,17 +73,20 @@ final class CliCommands {
             return spec.commandLine().getOut();
         }
 
-        /**
-         * Returns the writer for command diagnostics (progress, skipped-input
-         * warnings). Under {@code --error-format JSON} stderr must carry only the
-         * single JSON error envelope written by the exception handlers, so diagnostics
-         * are discarded there.
-         */
         final PrintWriter err() {
+            return spec.commandLine().getErr();
+        }
+
+        /**
+         * Returns the writer for free-text diagnostics such as skipped-input warnings.
+         * Under {@code --error-format JSON} every stderr line must be a JSON object, so
+         * free text is discarded there; the same details are in the response payload.
+         */
+        final PrintWriter diagnostics() {
             if (Ta4jCli.jsonErrorRun()) {
                 return DISCARDING_WRITER;
             }
-            return spec.commandLine().getErr();
+            return err();
         }
 
         final boolean optionMatched(String optionName) {
@@ -350,7 +353,7 @@ final class CliCommands {
         @Option(names = "--chart", paramLabel = "<jpeg-path>", description = "Optional JPEG chart output path.")
         String chart;
 
-        @Option(names = "--progress", description = "Emit bounded progress messages to stderr (ignored with --error-format JSON).")
+        @Option(names = "--progress", description = "Emit bounded progress messages to stderr (JSON lines with --error-format JSON).")
         boolean progress;
 
         @Option(names = "--reproducible", description = "Omit timestamps, paths, and timing metadata from JSON output.")
@@ -529,7 +532,7 @@ final class CliCommands {
             CliSupport.ResolvedStrategies resolvedStrategies = CliSupport.resolveStrategies(strategyInput.strategy,
                     strategyInput.strategyJsonFile, strategyInput.strategies, strategyInput.strategiesJsonFile,
                     unstableBars, series);
-            strategyInput.enforceInvalidInputPolicy(resolvedStrategies, err());
+            strategyInput.enforceInvalidInputPolicy(resolvedStrategies, diagnostics());
             CliSupport.requireBoundedStrategyBatch(resolvedStrategies.strategies(), series.getBarCount());
             CliSupport.requireBoundedCriterionWork(resolvedCriteria, series.getBarCount(),
                     resolvedStrategies.strategies().size(), 0);
@@ -661,7 +664,7 @@ final class CliCommands {
             CliSupport.ResolvedStrategies resolvedStrategies = CliSupport.resolveStrategies(strategyInput.strategy,
                     strategyInput.strategyJsonFile, strategyInput.strategies, strategyInput.strategiesJsonFile,
                     unstableBars, series);
-            strategyInput.enforceInvalidInputPolicy(resolvedStrategies, err());
+            strategyInput.enforceInvalidInputPolicy(resolvedStrategies, diagnostics());
             int splitCount = CliSupport.requireBoundedWalkForward(resolvedStrategies.strategies(), resolvedCriteria,
                     series, config);
 
