@@ -2,7 +2,7 @@
 
 ## Build provenance and compatibility
 
-`1.0.0-SNAPSHOT` uses JDK 25 as its build/quality-tool baseline and exactly `0.28.1-SNAPSHOT` of `ta4j-core` and `ta4j-examples`. That unpublished snapshot is currently an explicit upstream source prerequisite. No older release or GPU execution is qualified here.
+`1.0.0-SNAPSHOT` uses JDK 25 as its build/quality-tool baseline and exactly `0.29.1-SNAPSHOT` of `ta4j-core` and `ta4j-examples`. That unpublished snapshot is currently an explicit upstream source prerequisite. No older release or GPU execution is qualified here.
 
 For an isolated checkout without installed artifacts:
 

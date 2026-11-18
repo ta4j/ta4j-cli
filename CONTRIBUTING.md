@@ -4,7 +4,7 @@ The CLI is maintained independently of [ta4j/ta4j](https://github.com/ta4j/ta4j)
 
 ## Environment and dependencies
 
-Use JDK 25 and the included Maven Wrapper. Later JDKs are not a qualified build baseline for the pinned JaCoCo/SpotBugs toolchain. The CLI is `org.ta4j:ta4j-cli:1.0.0-SNAPSHOT`; the two upstream dependencies (`ta4j-core`, `ta4j-examples`) are explicitly pinned to `0.28.1-SNAPSHOT`. They are a source prerequisite, not a released-support claim. Follow the [README bootstrap](README.md#build-and-compatibility) when those artifacts are not already installed/published. The bootstrap installs their parent POM as well and records the resolved source commit when `TA4J_SOURCE_EVIDENCE_FILE` is set.
+Use JDK 25 and the included Maven Wrapper. Later JDKs are not a qualified build baseline for the pinned JaCoCo/SpotBugs toolchain. The CLI is `org.ta4j:ta4j-cli:1.0.0-SNAPSHOT`; the two upstream dependencies (`ta4j-core`, `ta4j-examples`) are explicitly pinned to `0.29.1-SNAPSHOT`. They are a source prerequisite, not a released-support claim. Follow the [README bootstrap](README.md#build-and-compatibility) when those artifacts are not already installed/published. The bootstrap installs their parent POM as well and records the resolved source commit when `TA4J_SOURCE_EVIDENCE_FILE` is set.
 
 Do not add parent-relative paths, a core test JAR, or a required native provider. Reuse `ta4jexamples.*` classes from the `ta4j-examples` artifact; do not copy their production implementations into the CLI. Optional native acceleration lives in the separate upstream `ta4j-acceleration` artifact and is not a CLI dependency. Tests use the two explicitly owned files under `fixtures/`, ordinary published core builders, and a local test-only log capture.
 

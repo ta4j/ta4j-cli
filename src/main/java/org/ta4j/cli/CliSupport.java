@@ -145,6 +145,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.OptionalInt;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -265,7 +266,7 @@ final class CliSupport {
         boolean csv = lowerCasePath.endsWith(".csv");
         if (csv) {
             requireBoundedDataFile(normalizedPath);
-            loadedSeries = CsvFileBarSeriesDataSource.loadCsvSeries(normalizedPath, true);
+            loadedSeries = CsvFileBarSeriesDataSource.loadCsvSeriesStrict(normalizedPath);
         } else if (lowerCasePath.endsWith(".json")) {
             requireBoundedDataFile(normalizedPath);
             loadedSeries = JsonFileBarSeriesDataSource.DEFAULT_INSTANCE.loadSeries(normalizedPath);
@@ -767,7 +768,8 @@ final class CliSupport {
      * count is bounded by the bar count.
      */
     private static BigInteger monteCarloSampledWork(MonteCarloMaximumDrawdownCriterion monteCarlo, long bars) {
-        long blocks = monteCarlo.getPathBlocks() == null ? bars : Math.max(0, monteCarlo.getPathBlocks());
+        OptionalInt pathBlocks = monteCarlo.getPathBlocks();
+        long blocks = pathBlocks.isPresent() ? Math.max(0, pathBlocks.getAsInt()) : bars;
         return BigInteger.valueOf(Math.max(0, monteCarlo.getIterations()))
                 .multiply(BigInteger.valueOf(blocks))
                 .multiply(BigInteger.valueOf(bars));
