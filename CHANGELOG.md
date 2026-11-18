@@ -6,7 +6,7 @@
 
 - Standalone `org.ta4j:ta4j-cli:1.0.0-SNAPSHOT` application with an independent Java 25/Maven build and executable dependency-inclusive JAR.
 - Preserved local CSV/JSON strategy backtest, walk-forward, bounded SMA sweep, indicator/rule exploration, forecasting, catalog discovery, completion, and deterministic performance-experiment workflows from ta4j PR #1610.
-- Explicit dependencies on `ta4j-core` and `ta4j-examples` at `0.28.1-SNAPSHOT`, with isolated source-ref bootstrap while those snapshots remain unpublished.
+- Explicit dependencies on `ta4j-core` and `ta4j-examples` at `0.29.1-SNAPSHOT`, with isolated source-ref bootstrap while those snapshots remain unpublished.
 - Owned regression/demo CSV and JSON fixtures, Maven-native quality checks, Unix/PowerShell quiet gates, and Linux/Windows CI with packaged scalar-workflow smoke coverage.
 
 ### Changed

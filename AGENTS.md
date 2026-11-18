@@ -5,7 +5,7 @@
 - Work from this standalone repository root. Read `JAVA_REVIEW.md` before Java, API, or test changes.
 - Reuse published ta4j APIs. Core numerical behavior belongs in `ta4j-core`; reusable data sources, charts, rules, and strategies belong in upstream `ta4j-examples`.
 - Reuse `ta4jexamples.*` classes from the `ta4j-examples` artifact. Do not add a ta4j parent/relativePath, a core internal test JAR, copied library implementations, or a mandatory native provider.
-- CLI versioning is independent: current CLI `1.0.0-SNAPSHOT`, pinned upstream `0.28.1-SNAPSHOT`, JDK 25 build/quality-tool baseline.
+- CLI versioning is independent: current CLI `1.0.0-SNAPSHOT`, pinned upstream `0.29.1-SNAPSHOT`, JDK 25 build/quality-tool baseline.
 
 ## 2) Safety and compatibility
 

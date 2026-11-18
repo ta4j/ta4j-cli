@@ -21,7 +21,7 @@ Requirements: JDK 25, Git, and the included Maven Wrapper (Maven 3.9+). Run comm
 
 | CLI | Required upstream libraries | Status |
 | --- | --- | --- |
-| `1.0.0-SNAPSHOT` | `org.ta4j:ta4j-core`, `ta4j-examples`, both `0.28.1-SNAPSHOT` | Source prerequisite; not yet a released/published compatibility baseline |
+| `1.0.0-SNAPSHOT` | `org.ta4j:ta4j-core`, `ta4j-examples`, both `0.29.1-SNAPSHOT` | Source prerequisite; not yet a released/published compatibility baseline |
 
 The CLI has its own version and standalone POM: it does not inherit the ta4j Maven parent or use the core internal test JAR. Its `ta4jexamples.*` imports (data sources, charting, rules, strategies) come from the `ta4j-examples` artifact.
 
